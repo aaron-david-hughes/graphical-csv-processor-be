@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "app.frontend",
+      "type": "java.lang.String",
+      "description": "URLs space separated from which to allow cross-origin resource sharing on the /process endpoint."
+    }
+  ] }
