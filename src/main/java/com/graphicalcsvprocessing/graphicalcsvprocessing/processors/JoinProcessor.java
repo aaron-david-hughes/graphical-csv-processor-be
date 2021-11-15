@@ -73,7 +73,10 @@ public class JoinProcessor implements Processor {
     /**
      * Method is O(MN) where M and N are the lengths of the two record sets
      *
-     * Not many ways to make this better - will continue to look for better
+     * Will have to consider what happens when column names clash in csv records...
+     *      - on join both of them
+     *      - on join is neither of them
+     *      - on join is one but not the other
      */
     private static CSV join(JoinType joinType, CSV superior, CSV inferior, String onSuperior, String onInferior) throws IOException {
         StringBuilder result = new StringBuilder(listToString(superior.getHeaders()) + "," + listToString(inferior.getHeaders()) + "\n");
