@@ -37,8 +37,6 @@ public class CSV {
             sb.append(listToString(entry.toList())).append("\n");
         }
 
-        records.get(0).isMapped("");
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.writeBytes(sb.substring(0, sb.length() - 1).getBytes());
         return outputStream;

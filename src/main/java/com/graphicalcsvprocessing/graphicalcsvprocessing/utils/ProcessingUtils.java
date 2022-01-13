@@ -19,7 +19,9 @@ public class ProcessingUtils {
     }
 
     public static String listToString(List<String> input) {
+        if (input == null) return "";
+
         String s = input.toString();
-        return s.substring(1, s.length() - 1).replaceAll("\\s", "");
+        return s.substring(1, s.length() - 1).replaceAll(",\\s", ",");
     }
 }

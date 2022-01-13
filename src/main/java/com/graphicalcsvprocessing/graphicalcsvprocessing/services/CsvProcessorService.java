@@ -1,6 +1,6 @@
 package com.graphicalcsvprocessing.graphicalcsvprocessing.services;
 
-import com.graphicalcsvprocessing.graphicalcsvprocessing.models.GraphicalDataModel;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.GraphDataModel;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Node;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOperations.OpenFileNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
@@ -14,27 +14,19 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * nodes will be represented as CSV objects stored in a local map variable
- * this map will be on name attributes for files if the node has one (file nodes)
- * if no name attribute it will done on searching map by node id
- */
 @Service
 public class CsvProcessorService {
 
-    public OutputStream process(GraphicalDataModel gdm, MultipartFile[] csvFiles) throws IOException {
+    public Map<String, CSV> process(GraphDataModel gdm, MultipartFile[] csvFiles) throws IOException {
         Map<String, CSV> csvData = readInputCsvList(csvFiles);
 
         prepareCsvData(gdm, csvData);
 
-        validateRequest(gdm, csvData);
-
-        CSV csv = processNodes(gdm, csvData);
-
-        return csv.getOutputStream();
+        //change to returning the list when know how to return multiple files
+        return processNodes(gdm, csvData);
     }
 
-    public void prepareCsvData(GraphicalDataModel gdm, Map<String, CSV> csvData) {
+    public void prepareCsvData(GraphDataModel gdm, Map<String, CSV> csvData) {
         //only one open file node allowed for a specific file name
         for (Node node : gdm.getNodes()) {
             if (node instanceof OpenFileNode) {
@@ -44,34 +36,45 @@ public class CsvProcessorService {
         }
     }
 
-    protected void validateRequest(GraphicalDataModel gdm, Map<String, CSV> csvData) {
-        //ensure at least one input file
-        if (csvData.isEmpty())
-            throw new IllegalArgumentException("Request must have input data supplied");
+    protected Map<String, CSV> processNodes(GraphDataModel gdm, Map<String, CSV> csvData) throws IOException {
+        Map<String, CSV> results = gdm.process(csvData);
 
-        //ensure for every open_file node there is a file which matches it's name
-        for (Node node : gdm.getNodes()) {
-            if (node instanceof OpenFileNode && !csvData.containsKey(node.getId()))
-                throw new IllegalArgumentException("Some open_file nodes refer to missing file");
-        }
-    }
-
-    protected CSV processNodes(GraphicalDataModel gdm, Map<String, CSV> csvData) throws IOException {
-        CSV result = gdm.process(csvData);
-
-        if (result == null) {
-            throw new IllegalArgumentException("Request must contain process nodes. None present.");
+        if (results.isEmpty()) {
+            throw new IllegalArgumentException("Request has no return file(s)");
         }
 
-        return result;
+        return results;
     }
 
     protected Map<String, CSV> readInputCsvList(MultipartFile[] csvFiles) throws IOException {
+        if (csvFiles.length == 0) throw new IllegalArgumentException("No files supplied");
+
         Map<String, CSV> csvData = new HashMap<>();
 
         for (MultipartFile csv : csvFiles) {
-            InputStreamReader reader = new InputStreamReader(new BOMInputStream(new ByteArrayInputStream(csv.getBytes()), false));
-            CSVParser parser = new CSVParser(reader, CSVFormat.Builder.create().setHeader().build());
+            //find a way to prefix filename to each header
+            BOMInputStream bom = new BOMInputStream(new ByteArrayInputStream(csv.getBytes()), false);
+
+            StringBuilder headers = new StringBuilder();
+            byte[] nextByte = bom.readNBytes(1);
+
+            //TODO: this should be checked against other file encoding standards (works against UTF8)
+            while (nextByte[0] != 13 && nextByte[0] != 10) {
+                headers.append(new String(nextByte));
+                nextByte = bom.readNBytes(1);
+            }
+
+            String[] headersArray = headers.toString().split(",");
+
+            for (int i = 0; i < headersArray.length; i++) {
+                headersArray[i] = csv.getOriginalFilename() != null
+                        ? csv.getOriginalFilename().replace(".csv", "") + "." + headersArray[i]
+                        : headersArray[i];
+            }
+
+            InputStreamReader reader = new InputStreamReader(bom);
+
+            CSVParser parser = new CSVParser(reader, CSVFormat.Builder.create().setHeader(headersArray).build());
             csvData.put(csv.getOriginalFilename(), new CSV(parser));
         }
 

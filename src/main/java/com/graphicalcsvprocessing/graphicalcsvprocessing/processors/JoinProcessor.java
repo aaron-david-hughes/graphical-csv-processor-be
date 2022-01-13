@@ -13,13 +13,7 @@ import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.Processing
 
 /**
  * join logic:
- *      note:
- *          - if the field is unique which the join is on, there should never be more records than the
- *          dominant record set
- *          - if the field is not unique, there may be many more rows as per the rules below.
- *          - default join is left
- *
- *      left join:
+ *      left join (default):
  *          will go through each record in left entered data, including a record for each time the relevant
  *          right column matches - or simply itself with null on right columns if no matches found
  *
@@ -37,11 +31,11 @@ import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.Processing
  */
 public class JoinProcessor implements Processor {
 
-    public static CSV join(JoinType joinType, JoinProcessingNode node, CSV[] inputs) throws IOException {
+    public static CSV join(JoinProcessingNode node, CSV[] inputs) throws IOException {
         CSV left = inputs[0];
         CSV right = inputs[1];
 
-        switch (joinType) {
+        switch (node.getJoinType()) {
             case RIGHT:
                 return rightJoin(left, right, node.getLeftCol(), node.getRightCol());
             case INNER:
@@ -77,6 +71,10 @@ public class JoinProcessor implements Processor {
      *      - on join both of them
      *      - on join is neither of them
      *      - on join is one but not the other
+     *
+     * This has been accepted by adding Filename prefixes to column names
+     * SQL return data in the same way on a simple join
+     * If desire is to filter or rename columns etc, those are additional functions...
      */
     private static CSV join(JoinType joinType, CSV superior, CSV inferior, String onSuperior, String onInferior) throws IOException {
         StringBuilder result = new StringBuilder(listToString(superior.getHeaders()) + "," + listToString(inferior.getHeaders()) + "\n");

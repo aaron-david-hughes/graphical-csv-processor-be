@@ -28,16 +28,9 @@ public class EdgeDeserializer extends StdDeserializer<Edge> {
             from = jsonContents.get("from").asText();
             to = jsonContents.get("to").asText();
         } catch (NullPointerException e) {
-            throw new IllegalArgumentException("Edge must not contain a null 'from' or 'to' label");
+            throw new IllegalArgumentException("Edge must contain both 'to' and 'from' values");
         }
 
-        String priority;
-        try {
-            priority = jsonContents.get("priority").asText();
-        } catch (NullPointerException ignore) {
-            priority = null;
-        }
-
-        return new Edge(from, to, priority);
+        return new Edge(from, to);
     }
 }

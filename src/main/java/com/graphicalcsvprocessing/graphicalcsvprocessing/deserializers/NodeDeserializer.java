@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Node;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOperations.OpenFileNode;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOperations.WriteFileNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.unaryOperations.FilterProcessingNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.JoinProcessingNode;
 
@@ -32,6 +33,9 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         try {
             String operation = jsonContents.get("operation").asText();
 
+            //this would have to now take from startup variables and act as per the configs
+            //what if FE json works out what type the node will be and maintains json format to be
+            //deserialized specifically in explicit service
             switch (operation) {
                 case OPEN_FILE:
                     return openFileDeserialize(jsonContents);
@@ -39,6 +43,8 @@ public class NodeDeserializer extends StdDeserializer<Node> {
                     return joinDeserialize(jsonContents);
                 case FILTER:
                     return filterDeserialize(jsonContents);
+                case WRITE_FILE:
+                    return writeFileDeserialize(jsonContents);
                 default:
                     throw new IllegalArgumentException("No nodes matching operation: " + operation);
             }
@@ -62,6 +68,13 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         return new OpenFileNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], name);
     }
 
+    private WriteFileNode writeFileDeserialize(JsonNode jsonContents) {
+        String[] coreAttributes = getCoreAttributes(jsonContents);
+        String name = jsonContents.get("name").asText();
+
+        return new WriteFileNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], name);
+    }
+
     private JoinProcessingNode joinDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
         String leftCol = jsonContents.get("onLeft").asText();
@@ -76,9 +89,5 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         String condition = jsonContents.get("condition").asText();
 
         return new FilterProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], condition);
-    }
-
-    private void test(String... args) {
-
     }
 }

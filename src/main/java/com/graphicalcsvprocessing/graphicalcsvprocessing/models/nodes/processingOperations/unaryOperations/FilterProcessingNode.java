@@ -1,10 +1,8 @@
 package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.unaryOperations;
 
-import com.graphicalcsvprocessing.graphicalcsvprocessing.models.Tree;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Node;
 
-import java.util.Map;
+import java.util.List;
 
 public class FilterProcessingNode extends UnaryOperationNode {
     protected String condition;
@@ -15,7 +13,7 @@ public class FilterProcessingNode extends UnaryOperationNode {
     }
 
     @Override
-    public CSV process(Tree.TreeNode<Node> node, Map<String, CSV> csvParsers) {
+    public CSV process(List<CSV> csvData) {
         return null;
     }
 }

@@ -1,18 +1,21 @@
 package com.graphicalcsvprocessing.graphicalcsvprocessing.controller;
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.annotations.RequestParamObject;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.models.GraphicalDataModel;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.GraphDataModel;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.CsvProcessorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Controller
 public class HomeController {
@@ -22,22 +25,32 @@ public class HomeController {
 
     // TODO
     //  1. some rudimentary form of exception handling
-    //  2. an integration guide end point with details of requirements of input - probs just a readme
-    //  3. check join expected behaviour on same column names in both files (joined on and otherwise)
-
+    //  2. an integration guide end point with details of requirements of input - probably just a readme
     @PostMapping("/process")
-    public ResponseEntity<Resource> postProcess(
+    public void postProcess(
+            HttpServletResponse response,
             @RequestParam(name = "csvFiles") MultipartFile[] csvFiles,
-            @RequestParamObject(name = "graph") GraphicalDataModel gdm
+            @RequestParamObject(name = "graph") GraphDataModel gdm
     ) throws IOException {
-        ByteArrayOutputStream outputStream = (ByteArrayOutputStream) csvProcessorService.process(gdm, csvFiles);
+        Map<String, CSV> returnFiles = csvProcessorService.process(gdm, csvFiles);
 
-        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(outputStream.toByteArray()));
+        try (ZipOutputStream zippedOut = new ZipOutputStream(response.getOutputStream())) {
+            for (Map.Entry<String, CSV> file : returnFiles.entrySet()) {
+                ByteArrayOutputStream outputStream = (ByteArrayOutputStream) file.getValue().getOutputStream();
 
-        return ResponseEntity
-                .ok()
-                .contentLength(outputStream.size())
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(resource);
+                ZipEntry e = new ZipEntry(file.getKey());
+                e.setSize(outputStream.size());
+                e.setTime(System.currentTimeMillis());
+
+                zippedOut.putNextEntry(e);
+                StreamUtils.copy(new ByteArrayInputStream(outputStream.toByteArray()), zippedOut);
+                zippedOut.closeEntry();
+            }
+            zippedOut.finish();
+        }
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename=results.zip");
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }
