@@ -25,6 +25,13 @@ public class GraphDataModel {
 
     public Map<String, CSV> process(Map<String, CSV> csvData) throws IOException {
         Map<String, CSV> csvReturns = new HashMap<>();
+
+        if (
+            this.getNodes() == null || this.getEdges() == null ||
+            this.getNodes().length == 0 || this.getEdges().length == 0 ||
+            csvData == null || csvData.isEmpty()
+        ) return csvReturns;
+
         Set<Node> mutableNodes = Arrays.stream(this.getNodes()).collect(Collectors.toSet());
         int nodesToProcess = mutableNodes.size();
 
@@ -35,7 +42,7 @@ public class GraphDataModel {
             mutableNodes.removeAll(removedNodes);
 
             if (nodesToProcess == mutableNodes.size()) {
-                throw new IllegalArgumentException("Graph has a process loop within");
+                throw new IllegalArgumentException("Graph has codependency within - likely due to loop");
             }
 
             nodesToProcess = mutableNodes.size();
@@ -98,7 +105,6 @@ public class GraphDataModel {
         }
     }
 
-    //kept to allow me to iterate nodes quickly if this data structure suits more (validating etc)
     public Node[] getNodes() {
         return this.nodes != null ? nodes.clone() : null;
     }
