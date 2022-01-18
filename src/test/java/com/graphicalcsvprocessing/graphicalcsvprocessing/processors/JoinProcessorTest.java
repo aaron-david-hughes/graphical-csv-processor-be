@@ -36,7 +36,7 @@ public class JoinProcessorTest {
         String rightFilename = "Scores.csv";
         String leftFilename = "Attendance.csv";
 
-        Map<String, CSV> inputData = testCSVBuilder.buildCsvInputList(leftFilename, rightFilename);
+        Map<String, CSV> inputData = testCSVBuilder.buildCsvInput(leftFilename, rightFilename);
 
         orderedData = new CSV[] {inputData.get(leftFilename), inputData.get(rightFilename)};
         reorderedData = new CSV[] {inputData.get(rightFilename), inputData.get(leftFilename)};

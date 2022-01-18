@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -47,7 +46,7 @@ public class GraphDataModelTest {
     @Before
     public void setUp() throws IOException {
         TestCSVBuilder dataBuilder = new TestCSVBuilder();
-        csvData = dataBuilder.buildCsvInputList("Attendance.csv", "Scores.csv");
+        csvData = dataBuilder.buildCsvInput("Attendance.csv", "Scores.csv");
         dataBuilder.prepareCsvData(gdm, csvData);
     }
 

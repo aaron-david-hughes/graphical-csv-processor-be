@@ -18,7 +18,11 @@ import java.util.Map;
  */
 public class TestCSVBuilder extends CsvProcessorService {
 
-    public Map<String, CSV> buildCsvInputList(String... files) throws IOException {
+    public Map<String, CSV> buildCsvInput(String... files) throws IOException {
+        return super.readInputCsvList(this.prepareMockMultipartFileArray(files));
+    }
+
+    public MultipartFile[] prepareMockMultipartFileArray(String... files) throws IOException {
         List<MockMultipartFile> inputs = new ArrayList<>();
 
         for (String filename : files) {
@@ -29,6 +33,6 @@ public class TestCSVBuilder extends CsvProcessorService {
             );
         }
 
-        return super.readInputCsvList(inputs.toArray(new MultipartFile[0]));
+        return inputs.toArray(MultipartFile[]::new);
     }
 }

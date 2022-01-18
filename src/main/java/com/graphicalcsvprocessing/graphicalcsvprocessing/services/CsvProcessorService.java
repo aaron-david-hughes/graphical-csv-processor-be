@@ -14,6 +14,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService.validateAlias;
+
 @Service
 public class CsvProcessorService {
 
@@ -22,18 +24,26 @@ public class CsvProcessorService {
 
         prepareCsvData(gdm, csvData);
 
-        //change to returning the list when know how to return multiple files
         return processNodes(gdm, csvData);
     }
 
     public void prepareCsvData(GraphDataModel gdm, Map<String, CSV> csvData) {
-        //only one open file node allowed for a specific file name
-        for (Node node : gdm.getNodes()) {
-            if (node instanceof OpenFileNode) {
-                String name = ((OpenFileNode) node).getName();
-                csvData.put(node.getId(), csvData.remove(name));
+        int openFileCount = 0;
+
+        try {
+            for (Node node : gdm.getNodes()) {
+                if (node instanceof OpenFileNode) {
+                    String name = ((OpenFileNode) node).getName();
+                    csvData.put(node.getId(), csvData.remove(name));
+                    openFileCount++;
+                }
             }
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("Problem with processing graph inputs");
         }
+
+        if (openFileCount == 0 ||openFileCount != csvData.size())
+            throw new IllegalArgumentException("Not all supplied files have a corresponding Open File Node.");
     }
 
     protected Map<String, CSV> processNodes(GraphDataModel gdm, Map<String, CSV> csvData) throws IOException {
@@ -47,30 +57,18 @@ public class CsvProcessorService {
     }
 
     protected Map<String, CSV> readInputCsvList(MultipartFile[] csvFiles) throws IOException {
-        if (csvFiles.length == 0) throw new IllegalArgumentException("No files supplied");
+        if (csvFiles == null || csvFiles.length == 0)
+            throw new IllegalArgumentException("No files supplied");
 
         Map<String, CSV> csvData = new HashMap<>();
 
         for (MultipartFile csv : csvFiles) {
-            //find a way to prefix filename to each header
+            if (csv == null)
+                throw new IllegalArgumentException("Files supplied are invalid");
+
             BOMInputStream bom = new BOMInputStream(new ByteArrayInputStream(csv.getBytes()), false);
 
-            StringBuilder headers = new StringBuilder();
-            byte[] nextByte = bom.readNBytes(1);
-
-            //TODO: this should be checked against other file encoding standards (works against UTF8)
-            while (nextByte[0] != 13 && nextByte[0] != 10) {
-                headers.append(new String(nextByte));
-                nextByte = bom.readNBytes(1);
-            }
-
-            String[] headersArray = headers.toString().split(",");
-
-            for (int i = 0; i < headersArray.length; i++) {
-                headersArray[i] = csv.getOriginalFilename() != null
-                        ? csv.getOriginalFilename().replace(".csv", "") + "." + headersArray[i]
-                        : headersArray[i];
-            }
+            String[] headersArray = this.extractHeaders(csv, bom);
 
             InputStreamReader reader = new InputStreamReader(bom);
 
@@ -79,5 +77,28 @@ public class CsvProcessorService {
         }
 
         return csvData;
+    }
+
+    private String[] extractHeaders(MultipartFile csv, BOMInputStream bom) throws IOException {
+        StringBuilder headers = new StringBuilder();
+        byte[] nextByte = bom.readNBytes(1);
+
+        while (nextByte.length > 0 && nextByte[0] != 13 && nextByte[0] != 10) {
+            headers.append(new String(nextByte));
+            nextByte = bom.readNBytes(1);
+        }
+
+        String[] headersArray = headers.toString().split(",");
+        String filename = csv.getOriginalFilename();
+        String alias = validateAlias(filename != null ? filename.replace(".csv", "") : null);
+
+        if (headersArray.length == 1 && headersArray[0].isEmpty())
+            throw new IllegalArgumentException(String.format("File '%s' is empty.", filename));
+
+        for (int i = 0; i < headersArray.length; i++) {
+            headersArray[i] = alias + "." + headersArray[i];
+        }
+
+        return headersArray;
     }
 }

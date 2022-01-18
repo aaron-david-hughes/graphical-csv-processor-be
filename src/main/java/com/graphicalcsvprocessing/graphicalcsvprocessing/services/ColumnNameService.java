@@ -10,6 +10,17 @@ import java.util.stream.Collectors;
 public class ColumnNameService {
     private ColumnNameService() {}
 
+    public static String validateAlias(String alias) {
+        if (alias != null && alias.matches("^[a-zA-Z0-9].[a-zA-Z0-9 _-]*$")) {
+            return alias;
+        }
+
+        throw new IllegalArgumentException(
+            "Alias supplied (may be a filename) of input file must start with a letter and " +
+                    "contain only a-z, A-Z, 0-9, space, underscore, hyphen."
+        );
+    }
+
     public static CorrespondingCSV deduceColumnName(String columnName, List<CSV> csvData) {
         if (columnName.contains(".")) {
             List<CSV> csvMatches = csvData.stream()

@@ -6,6 +6,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
@@ -22,12 +23,22 @@ public class CSV {
         parser.close();
     }
 
+    public CSV(List<String> headers, List<CSVRecord> records) {
+        this.headers = headers;
+        this.records = records;
+    }
+
+    public CSV(CSV csv) {
+        this.headers = csv.getHeaders();
+        this.records = csv.getRecords();
+    }
+
     public List<String> getHeaders() {
-        return this.headers;
+        return new ArrayList<>(this.headers);
     }
 
     public List<CSVRecord> getRecords() {
-        return this.records;
+        return new ArrayList<>(this.records);
     }
 
     public OutputStream getOutputStream() {

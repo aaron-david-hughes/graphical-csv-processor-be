@@ -9,6 +9,8 @@ import org.springframework.web.method.annotation.RequestParamMethodArgumentResol
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Objects;
+
 public class RequestParamDeserializingArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
@@ -28,7 +30,8 @@ public class RequestParamDeserializingArgumentResolver implements HandlerMethodA
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) throws Exception {
-        Object value = new RequestParamDeserializingArgumentStringResolver().resolveArgument(parameter, null, webRequest, null);
+        Object value = new RequestParamDeserializingArgumentStringResolver()
+                .resolveArgument(parameter, null, webRequest, null);
 
         if (!(value instanceof String)) {
             throw new IllegalArgumentException("Graph request param must be of type String");
@@ -36,10 +39,13 @@ public class RequestParamDeserializingArgumentResolver implements HandlerMethodA
 
         String json = (String) value;
 
-        Object arg = new ObjectMapper().readValue(json, parameter.getParameterType());
+        Object arg = !json.isEmpty() && !json.isBlank()
+                ? new ObjectMapper().readValue(json, parameter.getParameterType())
+                : null;
 
         if (checkRequired(parameter) && arg == null) {
-            throw new IllegalArgumentException("Graph request param may not be null");
+            throw new IllegalArgumentException(String.format("'%s' request param may not be null",
+                    Objects.requireNonNull(parameter.getParameterAnnotation(RequestParamObject.class)).name()));
         }
 
         return arg;

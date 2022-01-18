@@ -18,7 +18,7 @@ public class ColumnNameServiceTest {
 
     @Before
     public void setUp() throws IOException {
-        csvData = new TestCSVBuilder().buildCsvInputList("AttendanceUsingStudentNumber.csv", "Scores.csv");
+        csvData = new TestCSVBuilder().buildCsvInput("AttendanceUsingStudentNumber.csv", "Scores.csv");
     }
 
     @Test

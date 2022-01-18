@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Node;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOperations.OpenFileNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOperations.WriteFileNode;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.unaryOperations.AliasProcessingNode;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.unaryOperations.DropColumnProcessingNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.unaryOperations.FilterProcessingNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.JoinProcessingNode;
 
@@ -43,6 +45,10 @@ public class NodeDeserializer extends StdDeserializer<Node> {
                     return joinDeserialize(jsonContents);
                 case FILTER:
                     return filterDeserialize(jsonContents);
+                case DROP_COLUMN:
+                    return dropColumnDeserialize(jsonContents);
+                case ALIAS:
+                    return aliasDeserialize(jsonContents);
                 case WRITE_FILE:
                     return writeFileDeserialize(jsonContents);
                 default:
@@ -86,8 +92,24 @@ public class NodeDeserializer extends StdDeserializer<Node> {
 
     private FilterProcessingNode filterDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
+        String column = jsonContents.get("column").asText();
         String condition = jsonContents.get("condition").asText();
+        boolean equal = jsonContents.get("equal").asBoolean(true);
 
-        return new FilterProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], condition);
+        return new FilterProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], column, condition, equal);
+    }
+
+    private DropColumnProcessingNode dropColumnDeserialize(JsonNode jsonContents) {
+        String[] coreAttributes = getCoreAttributes(jsonContents);
+        String column = jsonContents.get("column").asText();
+
+        return new DropColumnProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], column);
+    }
+
+    private AliasProcessingNode aliasDeserialize(JsonNode jsonContents) {
+        String[] coreAttributes = getCoreAttributes(jsonContents);
+        String alias = jsonContents.get("alias").asText();
+
+        return new AliasProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], alias);
     }
 }
