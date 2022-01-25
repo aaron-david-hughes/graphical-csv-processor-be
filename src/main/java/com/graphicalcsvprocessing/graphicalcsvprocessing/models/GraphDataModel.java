@@ -32,7 +32,7 @@ public class GraphDataModel {
             csvData == null || csvData.isEmpty()
         ) return csvReturns;
 
-        Set<Node> mutableNodes = Arrays.stream(this.getNodes()).collect(Collectors.toSet());
+        List<Node> mutableNodes = Arrays.stream(this.getNodes()).collect(Collectors.toList());    //set usage here loses order and so loses quick process ability
         int nodesToProcess = mutableNodes.size();
 
         while (!mutableNodes.isEmpty()) {
@@ -51,7 +51,7 @@ public class GraphDataModel {
         return csvReturns;
     }
 
-    private void processIteration(Set<Node> mutableNodes, Map<String, CSV> csvData, Map<String, CSV> csvReturns, List<Node> remove) throws IOException {
+    private void processIteration(List<Node> mutableNodes, Map<String, CSV> csvData, Map<String, CSV> csvReturns, List<Node> remove) throws IOException {
         for (Node node : mutableNodes) {
             List<String> prerequisiteNodes = Arrays.stream(edges)
                     .filter(edge -> edge.getTo().equals(node.getId()))

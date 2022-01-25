@@ -14,8 +14,6 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService.validateAlias;
-
 @Service
 public class CsvProcessorService {
 
@@ -68,37 +66,12 @@ public class CsvProcessorService {
 
             BOMInputStream bom = new BOMInputStream(new ByteArrayInputStream(csv.getBytes()), false);
 
-            String[] headersArray = this.extractHeaders(csv, bom);
-
             InputStreamReader reader = new InputStreamReader(bom);
 
-            CSVParser parser = new CSVParser(reader, CSVFormat.Builder.create().setHeader(headersArray).build());
+            CSVParser parser = new CSVParser(reader, CSVFormat.Builder.create().setHeader().build());
             csvData.put(csv.getOriginalFilename(), new CSV(parser));
         }
 
         return csvData;
-    }
-
-    private String[] extractHeaders(MultipartFile csv, BOMInputStream bom) throws IOException {
-        StringBuilder headers = new StringBuilder();
-        byte[] nextByte = bom.readNBytes(1);
-
-        while (nextByte.length > 0 && nextByte[0] != 13 && nextByte[0] != 10) {
-            headers.append(new String(nextByte));
-            nextByte = bom.readNBytes(1);
-        }
-
-        String[] headersArray = headers.toString().split(",");
-        String filename = csv.getOriginalFilename();
-        String alias = validateAlias(filename != null ? filename.replace(".csv", "") : null);
-
-        if (headersArray.length == 1 && headersArray[0].isEmpty())
-            throw new IllegalArgumentException(String.format("File '%s' is empty.", filename));
-
-        for (int i = 0; i < headersArray.length; i++) {
-            headersArray[i] = alias + "." + headersArray[i];
-        }
-
-        return headersArray;
     }
 }

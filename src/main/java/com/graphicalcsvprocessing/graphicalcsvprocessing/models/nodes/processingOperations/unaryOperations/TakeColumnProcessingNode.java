@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DropColumnProcessingNode extends UnaryOperationNode {
+public class TakeColumnProcessingNode extends UnaryOperationNode {
     protected String[] columns;
 
-    public DropColumnProcessingNode(String id, String group, String operation, String[] columns) {
+    public TakeColumnProcessingNode(String id, String group, String operation, String[] columns) {
         super(id, group, operation);
         this.columns = columns;
     }
@@ -29,6 +29,6 @@ public class DropColumnProcessingNode extends UnaryOperationNode {
             columnList.add(csv.getColumnName());
         }
 
-        return ColumnProcessor.dropColumns(csvData.get(0), columnList);
+        return ColumnProcessor.takeColumns(csvData.get(0), columnList);
     }
 }

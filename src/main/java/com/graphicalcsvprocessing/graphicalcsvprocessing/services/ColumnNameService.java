@@ -21,6 +21,20 @@ public class ColumnNameService {
         );
     }
 
+    public static String validateColumnName(String columnName) {
+        if (columnName != null && columnName.matches("^[a-zA-Z0-9].[a-zA-Z0-9 _-]*(\\.[a-zA-Z0-9 _-]+)?$")) {
+            return columnName;
+        }
+
+        throw new IllegalArgumentException(
+                String.format(
+                        "Column name supplied '%s' does not match allowed input of alphanumeric characters, spaces, " +
+                                "hyphens, underscores, and maximum one '.' in the middle of the name",
+                        columnName
+                )
+        );
+    }
+
     public static CorrespondingCSV deduceColumnName(String columnName, List<CSV> csvData) {
         if (columnName.contains(".")) {
             List<CSV> csvMatches = csvData.stream()
@@ -35,7 +49,7 @@ public class ColumnNameService {
 
         for (CSV csv : csvData) {
             for (String hdr : csv.getHeaders()) {
-                if (hdr.matches(".*\\." + columnName)) {
+                if (hdr.endsWith("." + columnName) || hdr.equals(columnName)) {
                     col = hdr;
                     csvMatches.add(csv);
                 }

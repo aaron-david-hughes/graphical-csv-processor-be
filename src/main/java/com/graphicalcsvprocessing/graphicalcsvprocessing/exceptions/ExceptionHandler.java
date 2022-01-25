@@ -40,4 +40,22 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, ex.getMessage(), headers, HttpStatus.BAD_REQUEST, request);
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = NumberFormatException.class)
+    protected ResponseEntity<Object> handleNumberFormatExceptions(IllegalArgumentException ex, WebRequest request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+
+        return handleExceptionInternal(ex, ex.getMessage(), headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = Exception.class)
+    protected ResponseEntity<Object> handleIllegalArgumentExceptions(Exception ex, WebRequest request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+
+        return handleExceptionInternal(
+                ex, "A general processing error has occurred",
+                headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
 }

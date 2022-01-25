@@ -11,5 +11,12 @@ public abstract class ProcessingOperationNode extends Node {
         super(id, group, operation);
     }
 
-    public abstract CSV process(List<CSV> csvData) throws IOException;
+    public CSV process(List<CSV> csvData) throws IOException {
+        if (this.getAllowedNumberEdges() != csvData.size()) {
+            throw new IllegalArgumentException("Unary node '" + this.getId() + "' with incorrect number of inputs, expected '" +
+                    this.getAllowedNumberEdges() + "', but received '" + csvData.size() + "'");
+        }
+
+        return null;
+    }
 }

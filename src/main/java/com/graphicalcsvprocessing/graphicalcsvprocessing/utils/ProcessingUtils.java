@@ -22,6 +22,6 @@ public class ProcessingUtils {
         if (input == null) return "";
 
         String s = input.toString();
-        return s.substring(1, s.length() - 1).replaceAll(",\\s", ",");
+        return s.substring(1, s.length() - 1).replaceAll("null", "").replaceAll(",\\s", ",");
     }
 }
