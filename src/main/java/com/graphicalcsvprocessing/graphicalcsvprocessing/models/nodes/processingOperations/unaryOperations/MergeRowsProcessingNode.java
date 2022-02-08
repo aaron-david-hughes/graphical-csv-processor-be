@@ -21,7 +21,7 @@ public class MergeRowsProcessingNode extends UnaryOperationNode {
     public CSV process(List<CSV> csvData) throws IOException {
         super.process(csvData);
 
-        return MergeRowsProcessor.merge(csvData.get(0), column, value);
+        return MergeRowsProcessor.mergeRow(csvData.get(0), column, value);
     }
 
     public String getColumn() {

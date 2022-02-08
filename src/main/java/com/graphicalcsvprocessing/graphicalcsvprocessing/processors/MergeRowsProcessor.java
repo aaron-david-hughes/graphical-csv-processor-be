@@ -6,6 +6,10 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
@@ -14,34 +18,24 @@ public class MergeRowsProcessor implements Processor {
 
     private MergeRowsProcessor() {}
 
-    public static CSV merge(CSV input, String column, String value) throws IOException {
-        //basically will not merge unless values are equal or one is null while other is okay.
+    public static CSV mergeRow(CSV input, String column, String value) throws IOException {
         int columnIdx = input.getHeaderMap().get(column);
         int mergeRowIdx = -1;
 
         List<CSVRecord> rows = input.getRecords();
-        List<CSVRecord> mergeRows = new ArrayList<>();
+        List<Integer> mergeIndexes = new ArrayList<>();
 
         for (int i = 0; i < rows.size(); i++) {
             if (rows.get(i).get(columnIdx).equals(value)) {
-                mergeRows.add(rows.get(i));
+                mergeIndexes.add(i);
 
                 if (mergeRowIdx < 0) mergeRowIdx = i;
             }
         }
 
-        rows.removeAll(mergeRows);
+        List<String> outcomeRow = merge(input, mergeIndexes);
 
-        if (mergeRows.size() == 1) return input;
-
-        List<String> headers = input.getHeaders();
-        List<String> outcomeRow = new ArrayList<>();
-
-        for (int i = 0; i < headers.size(); i++) {
-            outcomeRow.add(assertNoColumnValuesClash(mergeRows, i));
-        }
-
-        StringBuilder sb = new StringBuilder().append(listToString(headers)).append("\n");
+        StringBuilder sb = new StringBuilder().append(listToString(input.getHeaders())).append("\n");
 
         for (int i = 0; i < rows.size(); i++) {
             if (mergeRowIdx == i) {
@@ -51,6 +45,29 @@ public class MergeRowsProcessor implements Processor {
         }
 
         return createCSV(sb);
+    }
+
+    //offset should be recursively passed in row size minus (size of merged rows before - 1)
+    public static List<String> merge(CSV input, List<Integer> mergeIndexes) {
+        List<CSVRecord> rows = input.getRecords();
+        List<CSVRecord> mergeRows = mergeIndexes.stream().map(rows::get).collect(Collectors.toList());
+
+        rows.removeAll(mergeRows);
+
+        if (mergeRows.size() == 1) return new ArrayList<>(mergeRows.get(0).toList());
+
+        List<String> headers = input.getHeaders();
+        Map<Integer, String> outcomeRowValues = new ConcurrentHashMap<>();
+
+        IntStream.range(0, headers.size()).parallel()
+                .forEach(i -> outcomeRowValues.put(i, assertNoColumnValuesClash(mergeRows, i)));
+
+        List<String> outcomeRow = new ArrayList<>();
+
+        for (int i = 0; i < outcomeRowValues.size(); i++)
+            outcomeRow.add(outcomeRowValues.get(i));
+
+        return outcomeRow;
     }
 
     private static boolean nullBlankOrEmpty(String v) {

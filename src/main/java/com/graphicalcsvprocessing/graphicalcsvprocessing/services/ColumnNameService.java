@@ -5,7 +5,6 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ColumnNameService {
     private ColumnNameService() {}
@@ -37,9 +36,12 @@ public class ColumnNameService {
 
     public static CorrespondingCSV deduceColumnName(String columnName, List<CSV> csvData) {
         if (columnName.contains(".")) {
-            List<CSV> csvMatches = csvData.stream()
-                    .filter(csv -> csv.getHeaders().contains(columnName))
-                    .collect(Collectors.toList());
+            List<CSV> csvMatches = new ArrayList<>();
+
+            for (CSV csv : csvData) {
+                Integer i = csv.getHeaderMap().get(columnName);
+                if (i != null) csvMatches.add(csv);
+            }
 
             return validate(csvMatches, columnName, columnName);
         }

@@ -10,6 +10,7 @@ import java.io.IOException;
 
 public class EdgeDeserializer extends StdDeserializer<Edge> {
 
+    @SuppressWarnings("unused")
     public EdgeDeserializer() {
         this(null);
     }

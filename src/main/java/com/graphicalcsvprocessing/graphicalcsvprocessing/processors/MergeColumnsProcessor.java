@@ -57,6 +57,7 @@ public class MergeColumnsProcessor implements Processor {
         return v == null || v.isEmpty() || v.isBlank();
     }
 
+    @SuppressWarnings("unused")
     public enum MergeType {
         STRING_EQUALITY((v1, v2) -> {
             if (nullBlankOrEmpty(v1) || nullBlankOrEmpty(v2)) {

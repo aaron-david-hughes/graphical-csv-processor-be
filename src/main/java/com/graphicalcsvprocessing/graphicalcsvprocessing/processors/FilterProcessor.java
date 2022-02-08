@@ -12,6 +12,8 @@ public class FilterProcessor implements Processor {
 
     private FilterProcessor() {}
 
+    private static final String NUMERIC_FILTER_ON_NO_NUMERIC = "Cannot carry out numeric filter on cell without number";
+
     public static CSV filter(CSV operand, String column, FilterProcessingNode node) {
         List<CSVRecord> matches = new ArrayList<>();
         List<CSVRecord> notMatches = new ArrayList<>();
@@ -29,37 +31,58 @@ public class FilterProcessor implements Processor {
         return new CSV(operand.getHeaders(), operand.getHeaderMap(), node.isEqual() ? matches : notMatches);
     }
 
+    @SuppressWarnings("unused")
     public enum FilterType {
         STRING_EQUALITY(String::equals),
         NUMERIC_EQUALITY((c, v) -> {
-            double cDbl = Double.parseDouble(c);
-            double vDbl = Double.parseDouble(v);
+            try {
+                double cDbl = Double.parseDouble(c);
+                double vDbl = Double.parseDouble(v);
 
-            return cDbl == vDbl;
+                return cDbl == vDbl;
+            } catch (Exception e) {
+                throw new IllegalArgumentException(NUMERIC_FILTER_ON_NO_NUMERIC, e);
+            }
         }),
         GREATER_THAN((c, v) -> {
-            double cDbl = Double.parseDouble(c);
-            double vDbl = Double.parseDouble(v);
+            try {
+                double cDbl = Double.parseDouble(c);
+                double vDbl = Double.parseDouble(v);
 
-            return cDbl > vDbl;
+                return cDbl > vDbl;
+            } catch (Exception e) {
+                throw new IllegalArgumentException(NUMERIC_FILTER_ON_NO_NUMERIC, e);
+            }
         }),
         GREATER_THAN_OR_EQUAL((c, v) -> {
-            double cDbl = Double.parseDouble(c);
-            double vDbl = Double.parseDouble(v);
+            try {
+                double cDbl = Double.parseDouble(c);
+                double vDbl = Double.parseDouble(v);
 
-            return cDbl >= vDbl;
+                return cDbl >= vDbl;
+            } catch (Exception e) {
+                throw new IllegalArgumentException(NUMERIC_FILTER_ON_NO_NUMERIC, e);
+            }
         }),
         LESS_THAN((c, v) -> {
-            double cDbl = Double.parseDouble(c);
-            double vDbl = Double.parseDouble(v);
+            try {
+                double cDbl = Double.parseDouble(c);
+                double vDbl = Double.parseDouble(v);
 
-            return cDbl < vDbl;
+                return cDbl < vDbl;
+            } catch (Exception e) {
+                throw new IllegalArgumentException(NUMERIC_FILTER_ON_NO_NUMERIC, e);
+            }
         }),
         LESS_THAN_OR_EQUAL((c, v) -> {
-            double cDbl = Double.parseDouble(c);
-            double vDbl = Double.parseDouble(v);
+            try {
+                double cDbl = Double.parseDouble(c);
+                double vDbl = Double.parseDouble(v);
 
-            return cDbl <= vDbl;
+                return cDbl <= vDbl;
+            } catch (Exception e) {
+                throw new IllegalArgumentException(NUMERIC_FILTER_ON_NO_NUMERIC, e);
+            }
         });
 
         FilterType(BiPredicate<String, String> predicate) {

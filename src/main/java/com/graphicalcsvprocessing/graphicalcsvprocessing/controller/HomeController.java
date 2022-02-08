@@ -5,7 +5,6 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.GraphDataModel;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.CsvProcessorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,7 @@ public class HomeController {
 
     // TODO
     //  1. some rudimentary form of exception handling
-    //  2. an integration guide end point with details of requirements of input - probably just a readme
+    //  2. an integration guide end point with details of requirements of input - probably just a README.md
     @PostMapping("/process")
     public void postProcess(
             HttpServletResponse response,

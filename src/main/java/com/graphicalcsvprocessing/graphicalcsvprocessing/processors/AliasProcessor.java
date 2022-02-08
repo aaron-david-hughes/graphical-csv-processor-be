@@ -28,13 +28,38 @@ public class AliasProcessor {
             throw new IllegalArgumentException("Not all unqualified columns are unique in the input data set.");
         }
 
-        StringBuilder sb = new StringBuilder().append(listToString(aliasHeadersList)).append("\n");
+        return createCSV(getStringBuilder(aliasHeadersList, input.getRecords()));
+    }
 
-        for (CSVRecord csvRecord : input.getRecords()) {
+    public static CSV dropAlias(CSV input) throws IOException {
+        List<String> headers = input.getHeaders();
+        Set<String> duplicateHeaderCheck = new HashSet<>();
+
+        for (String header : headers) {
+            int idx = header.indexOf('.');
+
+            if (idx >= 0 && idx < header.length() - 1) {
+                header = header.substring(idx + 1);
+            }
+
+            duplicateHeaderCheck.add(header);
+        }
+
+        if (duplicateHeaderCheck.size() != headers.size()) {
+            throw new IllegalArgumentException("Alias removal results in duplicate column headers");
+        }
+
+        return createCSV(getStringBuilder(headers, input.getRecords()));
+    }
+
+    private static StringBuilder getStringBuilder(List<String> headers, List<CSVRecord> records) {
+        StringBuilder sb = new StringBuilder().append(listToString(headers)).append("\n");
+
+        for (CSVRecord csvRecord : records) {
             List<String> row = new ArrayList<>(csvRecord.toList());
             sb.append(listToString(row)).append("\n");
         }
 
-        return createCSV(sb);
+        return sb;
     }
 }

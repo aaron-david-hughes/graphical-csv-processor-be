@@ -32,7 +32,7 @@ public class GraphDataModel {
             csvData == null || csvData.isEmpty()
         ) return csvReturns;
 
-        List<Node> mutableNodes = Arrays.stream(this.getNodes()).collect(Collectors.toList());    //set usage here loses order and so loses quick process ability
+        List<Node> mutableNodes = Arrays.stream(this.getNodes()).collect(Collectors.toList());
         int nodesToProcess = mutableNodes.size();
 
         while (!mutableNodes.isEmpty()) {
@@ -65,7 +65,7 @@ public class GraphDataModel {
 
             if (node instanceof ProcessingOperationNode && availableInputs.size() == prerequisiteNodes.size()) {
                 CSV csv = ((ProcessingOperationNode) node).process(availableInputs);
-                //within that process method will be where network handling stuff will be...
+                //log process completed with node id and perhaps data details like size etc
 
                 if (Arrays.stream(edges).noneMatch(edge -> edge.getFrom().equals(node.getId()))) {
                     csvReturns.put(node.getId(), csv);
