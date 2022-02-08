@@ -67,20 +67,20 @@ curl --location --request POST 'http://localhost:8080/process' \
 *   Nodes supplied must have the required attributes specified, or have a default supplied.
 *   Edges must contain both 'from' and 'to' attributes referring to node ids.
 
-### _Valid Columns Names_ <a id="valid_columns"></a>
+### _Valid Columns Names_
 
 *   A column name may be any alphanumeric string with spaces, underscores and hyphens possible.
 *   An alias is optional
 *   If an alias is present it must start alphanumeric then may also include spaces, underscores and hyphens.
 *   A single '.' character will separate the alias from the column name.
 
-### _Identifying Columns_ <a id="identifying_columns"></a>
+### _Identifying Columns_
 
 *   If a column name alone is unique across the list of csvs supplied to a node, this is sufficient to deduce the column referenced.
 *   Otherwise, the alias is required to identify the column being referenced.
 *   In the event a missing or an ambiguous column name is supplied to the API, it will return exception indicating the issue.
 
-### _Clashing Data_ <a id="clashing_data"></a>
+### _Clashing Data_
 On a merge of any type, checks are taken to ensure cells don't lose genuine data.
 Genuine data is considered cells with non-empty string content.
 
@@ -106,26 +106,26 @@ That is to emphasise **you cannot have loops in the supplied graph**
 Node Types
 ----------
 
-*   [Alias Node](#alias)
-*   [Concat Columns Node](#concat_columns)
-*   [Concat Tables Node](#concat_tables)
-*   [Drop Alias Node](#drop_alias)
-*   [Drop Columns Node](#drop_columns)
-*   [Filter Node](#filter)
-*   [Join Node](#join)
-*   [Limit Node](#limit)
-*   [Merge Columns Node](#merge_columns)
-*   [Merge Rows Node](#merge_rows)
-*   [Open File Node](#open_file)
-*   [Or Node](#or)
-*   [Order Column Node](#order_column)
-*   [Rename Column Node](#rename_column)
-*   [Set Compliment Node](#set_compliment)
-*   [Take Columns Node](#take_columns)
-*   [Unique Columns Node](#unique_columns)
-*   [Write File Node](#write_file)
+*   [Alias Node](#_alias-node_)
+*   [Concat Columns Node](#_concat-columns-node_)
+*   [Concat Tables Node](#_concat-tables-node_)
+*   [Drop Alias Node](#_drop-alias-node_)
+*   [Drop Columns Node](#_drop-columns-node_)
+*   [Filter Node](#_filter-node_)
+*   [Join Node](#_join-node_)
+*   [Limit Node](#_limit-node_)
+*   [Merge Columns Node](#_merge-columns-node_)
+*   [Merge Rows Node](#_merge-rows-node_)
+*   [Open File Node](#_open-file-node_)
+*   [Or Node](#_or-node_)
+*   [Order Column Node](#_order-column-node_)
+*   [Rename Column Node](#_rename-column-node_)
+*   [Set Compliment Node](#_set-compliment-node_)
+*   [Take Columns Node](#_take-columns-node_)
+*   [Unique Columns Node](#_unique-column-node_)
+*   [Write File Node](#_write-file-node_)
 
-### _Alias Node_ <a id="alias"></a>
+### _Alias Node_
 
 **Description:** Prefixes supplied alias onto the columns of the supplied csv.  
 **Inputs:** 1 csv file (will remove existing alias on any of the columns if present).  
@@ -139,7 +139,7 @@ Node Types
 *   Not 1 and only 1 inbound csv
 *   Resultant csv does not have unique column headers
 
-### _Concat Columns Node_ <a id="concat_columns"></a>
+### _Concat Columns Node_
 
 **Description:** Creates a suffixed column on csv in the order of first column value + second column value.  
 **Inputs:** 1 csv file.  
@@ -152,17 +152,17 @@ Node Types
 
 **Exceptions if:**
 
-*   Column1 or column2 cannot be [identified](#identifying_columns)
-*   Concat header is not [valid](#valid_columns)
+*   Column1 or column2 cannot be [identified](#_identifying-columns_)
+*   Concat header is not [valid](#_valid-columns-names_)
 
-### _Concat Tables Node_ <a id="concat_tables"></a>
+### _Concat Tables Node_
 
 **Description:** Takes 2 input csvs and produces single csv with number of rows matching sum of two inputs rows. Headers are merged to avoid duplicate headers.  
 **Inputs:** 2 csv files.  
 **Outputs:** A table of the two inputs.  
 **Attributes:** 0
 
-### _Drop Alias Node_ <a id="drop_alias"></a>
+### _Drop Alias Node_
 
 **Description:** Removes any identifier alias on the columns of the input csv.  
 **Inputs:** 1 csv file.  
@@ -170,9 +170,9 @@ Node Types
 **Attributes:** 0  
 **Exceptions if:**
 
-*   Resultant csv does not have [unique](#identifying_columns) column headers
+*   Resultant csv does not have [unique](#_identifying-columns_) column headers
 
-### _Drop Columns Node_ <a id="drop_columns"></a>
+### _Drop Columns Node_
 
 **Description:** Removes the blacklist of columns from the resultant csv.  
 **Inputs:** 1 csv file.  
@@ -183,9 +183,9 @@ Node Types
 
 **Exceptions if:**
 
-*   Any column in list cannot be [identified](#identifying_columns)
+*   Any column in list cannot be [identified](#_identifying-columns_)
 
-### _Filter Node_ <a id="filter"></a>
+### _Filter Node_
 
 **Description:** Filter for equality or an inequality.  
 **Inputs:** 1 csv file.  
@@ -205,10 +205,10 @@ Node Types
 
 **Exceptions if:**
 
-*   Any column in list cannot be [identified](#identifying_columns)
+*   Any column in list cannot be [identified](#_identifying-columns_)
 *   Condition requires double and cannot be parsed to double
 
-### _Join Node_ <a id="join"></a>
+### _Join Node_
 
 **Description:** Join two csv files on commonality of two columns.  
 **Inputs:** 2 csv files.  
@@ -226,9 +226,9 @@ Node Types
 
 **Exceptions if:**
 
-*   Either column specified cannot be [identified](#identifying_columns)
+*   Either column specified cannot be [identified](#_identifying-columns_)
 
-### _Limit Node_ <a id="limit"></a>
+### _Limit Node_
 
 **Description:** Limit number of rows in the supplied csv.  
 **Inputs:** 1 csv file.  
@@ -241,7 +241,7 @@ Node Types
 
 *   Limit supplied is negative
 
-### _Merge Columns Node_ <a id="merge_columns"></a>
+### _Merge Columns Node_
 
 **Description:** Merge two columns into one in the position of the first column.  
 **Inputs:** 1 csv file.  
@@ -257,11 +257,11 @@ Node Types
 
 **Exceptions if:**
 
-*   Either column specified cannot be [identified](#identifying_columns)
-*   New column name is [invalid](#valid_columns)
-*   Data in two columns of any row [clash](#clashing_data)
+*   Either column specified cannot be [identified](#_identifying-columns_)
+*   New column name is [invalid](#_valid-columns-names_)
+*   Data in two columns of any row [clash](#_clashing-data_)
 
-### _Merge Rows Node_ <a id="merge_rows"></a>
+### _Merge Rows Node_
 
 **Description:** Merge rows which hold value in the column specified into one.  
 **Inputs:** 1 csv file.  
@@ -273,10 +273,10 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#identifying_columns)
-*   Data in rows [clash](#clashing_data)
+*   Column specified cannot be [identified](#_identifying-columns_)
+*   Data in rows [clash](#_clashing-data_)
 
-### _Open File Node_ <a id="open_file"></a>
+### _Open File Node_
 
 **Description:** Node to represent supplied file by setting name to filename.  
 **Inputs:** 0 csv file.  
@@ -285,7 +285,7 @@ Node Types
 
 *   String: name
 
-### _Or Node_ <a id="or"></a>
+### _Or Node_
 
 **Description:** Logical or node. To be applied on two filter nodes enabling logical or.  
 **Inputs:** 2 csv files.  
@@ -296,10 +296,10 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#identifying_columns) post concat
-*   Data in rows [clash](#clashing_data) on unique
+*   Column specified cannot be [identified](#_identifying-columns_) post concat
+*   Data in rows [clash](#_clashing-data_) on unique
 
-### _Order Column Node_ <a id="order_column"></a>
+### _Order Column Node_
 
 **Description:** Orders specified column as per order type supplied.  
 **Inputs:** 1 csv file.  
@@ -315,9 +315,9 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#identifying_columns)
+*   Column specified cannot be [identified](#_identifying-columns_)
 
-### _Rename Column Node_ <a id="rename_column"></a>
+### _Rename Column Node_
 
 **Description:** Renames the specified column in the supplied csv.  
 **Inputs:** 1 csv file.  
@@ -329,10 +329,10 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#identifying_columns)
-*   New column name is [invalid](#valid_columns)
+*   Column specified cannot be [identified](#_identifying-columns_)
+*   New column name is [invalid](#_valid-columns-names_)
 
-### _Set Compliment Node_ <a id="set_compliment"></a>
+### _Set Compliment Node_
 
 **Description:** Returns the complimentary set of subset compared to super set using key header as indicator for which fields are present. Note bigger csv supplied assumed as super set.  
 **Inputs:** 2 csv files.  
@@ -343,10 +343,10 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#identifying_columns)
+*   Column specified cannot be [identified](#_identifying-columns_)
 *   Headers in two supplied files are not identical
 
-### _Take Columns Node_ <a id="take_columns"></a>
+### _Take Columns Node_
 
 **Description:** Takes the whitelist of columns from the resultant csv.  
 **Inputs:** 1 csv file.  
@@ -357,9 +357,9 @@ Node Types
 
 **Exceptions if:**
 
-*   Any column in list cannot be [identified](#identifying_columns)
+*   Any column in list cannot be [identified](#_identifying-columns_)
 
-### _Unique Column Node_ <a id="unique_column"></a>
+### _Unique Column Node_
 
 **Description:** Merges the rows with matching value in specified column into one row.  
 **Inputs:** 1 csv file.  
@@ -370,10 +370,10 @@ Node Types
 
 **Exceptions if:**
 
-*   Column supplied cannot be [identified](#identifying_columns)
-*   Any of the row merges contain [clashing](#clashing_data) data
+*   Column supplied cannot be [identified](#_identifying-columns_)
+*   Any of the row merges contain [clashing](#_clashing-data_) data
 
-### _Write File Node_ <h6 href="#write_file" id="write_file"></h6>
+### _Write File Node_
 
 **Description:** Renames input file and ensures it is in the returned files in response. Useful in debugging queries too.  
 **Inputs:** 1 csv file.  
