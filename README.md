@@ -373,7 +373,7 @@ Node Types
 *   Column supplied cannot be [identified](#identifying_columns)
 *   Any of the row merges contain [clashing](#clashing_data) data
 
-### _Write File Node_ <a href="#write_file" id="write_file"></a>
+### _Write File Node_ <h6 href="#write_file" id="write_file"></h6>
 
 **Description:** Renames input file and ensures it is in the returned files in response. Useful in debugging queries too.  
 **Inputs:** 1 csv file.  
