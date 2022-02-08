@@ -123,7 +123,7 @@ Node Types
 *   [Set Compliment Node](#set_compliment)
 *   [Take Columns Node](#take_columns)
 *   [Unique Columns Node](#unique_columns)
-*   [Write File Node](#write_file)
+*   [Write File Node](#_write-file-node_-a-idwrite_filea)
 
 ### _Alias Node_ <a id="alias"></a>
 
@@ -243,7 +243,7 @@ Node Types
 
 ### _Merge Columns Node_ <a id="merge_columns"></a>
 
-**Description:** Merge two columns into one in the position of the first column. 
+**Description:** Merge two columns into one in the position of the first column.  
 **Inputs:** 1 csv file.  
 **Outputs:** Copy of input csv with the specified columns merged.  
 **Attributes:** 4
@@ -263,7 +263,7 @@ Node Types
 
 ### _Merge Rows Node_ <a id="merge_rows"></a>
 
-**Description:** Merge rows which hold value in the column specified into one.
+**Description:** Merge rows which hold value in the column specified into one.  
 **Inputs:** 1 csv file.  
 **Outputs:** Copy of input csv with the rows merged.  
 **Attributes:** 2
@@ -278,7 +278,7 @@ Node Types
 
 ### _Open File Node_ <a id="open_file"></a>
 
-**Description:** Node to represent supplied file by setting name to filename.
+**Description:** Node to represent supplied file by setting name to filename.  
 **Inputs:** 0 csv file.  
 **Outputs:** Copy of input csv supplied in request.  
 **Attributes:** 1
@@ -301,7 +301,7 @@ Node Types
 
 ### _Order Column Node_ <a id="order_column"></a>
 
-**Description:** Orders specified column as per order type supplied.
+**Description:** Orders specified column as per order type supplied.  
 **Inputs:** 1 csv file.  
 **Outputs:** Copy of input csv with rows ordered as specified.  
 **Attributes:** 2
@@ -319,7 +319,7 @@ Node Types
 
 ### _Rename Column Node_ <a id="rename_column"></a>
 
-**Description:** Renames the specified column in the supplied csv.
+**Description:** Renames the specified column in the supplied csv.  
 **Inputs:** 1 csv file.  
 **Outputs:** Copy of input csv with the specified columns merged.  
 **Attributes:** 2
