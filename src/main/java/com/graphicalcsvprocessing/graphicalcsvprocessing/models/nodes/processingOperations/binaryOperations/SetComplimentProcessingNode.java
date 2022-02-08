@@ -6,26 +6,27 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.SetProcessor
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SetComplimentProcessingNode extends BinaryOperationNode {
 
-    protected String setColumn;
-    protected String subsetColumn;
+    protected String keyHeader;
 
-    public SetComplimentProcessingNode(String id, String group, String operation, String setColumn, String subsetColumn) {
+    public SetComplimentProcessingNode(String id, String group, String operation, String keyHeader) {
         super(id, group, operation);
-        this.setColumn = setColumn;
-        this.subsetColumn = subsetColumn;
+        this.keyHeader = keyHeader;
     }
 
     @Override
     public CSV process(List<CSV> csvData) throws IOException {
         super.process(csvData);
 
-        CorrespondingCSV csv = ColumnNameService.deduceColumnName(setColumn, csvData);
-        CorrespondingCSV subsetCsv = ColumnNameService.deduceColumnName(subsetColumn, csvData);
+        csvData.sort(Comparator.comparingInt(csv -> csv.getRecords().size()));
 
-        return SetProcessor.getCompliment(csv.getCsv(), subsetCsv.getCsv(), csv.getColumnName(), subsetCsv.getColumnName());
+        CorrespondingCSV csv = ColumnNameService.deduceColumnName(keyHeader, Collections.singletonList(csvData.get(1)));
+
+        return SetProcessor.getCompliment(csvData.get(1), csvData.get(0), csv.getColumnName());
     }
 }

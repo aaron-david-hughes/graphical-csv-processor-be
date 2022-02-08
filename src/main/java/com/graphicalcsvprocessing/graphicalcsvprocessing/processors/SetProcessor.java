@@ -3,13 +3,9 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.processors;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import org.apache.commons.csv.CSVRecord;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService.deduceColumnName;
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService.validateColumnName;
 
 public class SetProcessor implements Processor {
 
@@ -17,13 +13,13 @@ public class SetProcessor implements Processor {
 
     private static final String HEADER_ERROR_MSG = "Compliment must be ran on CSVs with the same headers";
 
-    public static CSV getCompliment(CSV set, CSV subset, String setHeader, String subsetHeader) {
-        if (!isComparableSet(set, subset, setHeader, subsetHeader)) throw new IllegalArgumentException(HEADER_ERROR_MSG);
+    public static CSV getCompliment(CSV set, CSV subset, String keyHeader) {
+        if (!isComparableSet(set, subset)) throw new IllegalArgumentException(HEADER_ERROR_MSG);
 
         List<CSVRecord> records = set.getRecords();
         List<CSVRecord> subsetRecords = subset.getRecords();
-        int setHeaderIdx = set.getHeaderMap().get(setHeader);
-        int subsetHeaderIdx = subset.getHeaderMap().get(subsetHeader);
+        int setHeaderIdx = set.getHeaderMap().get(keyHeader);
+        int subsetHeaderIdx = subset.getHeaderMap().get(keyHeader);
 
         Set<String> presentInSubset = subsetRecords.stream()
                 .map(csvRecord -> csvRecord.get(subsetHeaderIdx))
@@ -36,28 +32,19 @@ public class SetProcessor implements Processor {
         return new CSV(set.getHeaders(), set.getHeaderMap(), complimentRecords);
     }
 
-    private static boolean isComparableSet(CSV set, CSV subset, String setHeader, String subsetHeader) {
+    private static boolean isComparableSet(CSV set, CSV subset) {
         List<String> headers = set.getHeaders();
         List<String> subsetHeaders = subset.getHeaders();
 
         if (headers.size() == subsetHeaders.size()) {
-            List<String> strippedAliasSubsetHeaders = subsetHeaders.stream()
-                    .filter(header -> !header.equals(subsetHeader))
-                    .map(s -> validateColumnName(s).contains(".") ? s.substring(s.indexOf('.') + 1) : s)
-                    .collect(Collectors.toList());
-
-            for (String header : strippedAliasSubsetHeaders) {
-                try {
-                    String superHeader = deduceColumnName(header, Collections.singletonList(set)).getColumnName();
-                    headers.remove(superHeader);
-                } catch (IllegalArgumentException e) {
-                    return false;
-                }
+            for (int i = headers.size() - 1; i >= 0; i--) {
+                if (!headers.get(i).equals(subsetHeaders.get(i))) return false;
+                headers.remove(i);
             }
 
-            return headers.size() == 1 && headers.get(0).equals(setHeader);
-        } else {
-            return false;
+            return headers.isEmpty();
         }
+
+        return false;
     }
 }

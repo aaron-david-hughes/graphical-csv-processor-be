@@ -96,7 +96,7 @@ public class NodeDeserializer extends StdDeserializer<Node> {
             try {
                 output[i] = jsonContents.get(attributes[i]).asText();
             } catch (NullPointerException e) {
-                if (defaults.containsKey(attributes[i]))
+                if (!defaults.containsKey(attributes[i]))
                     throw new IllegalArgumentException("Node missing necessary attribute - refer to README.md", e);
 
                 output[i] = defaults.get(attributes[i]);
@@ -225,9 +225,9 @@ public class NodeDeserializer extends StdDeserializer<Node> {
 
     private static SetComplimentProcessingNode setComplimentDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, SET_COLUMN, SUBSET_COLUMN);
+        String[] attributes = getSpecificAttributes(jsonContents, defaults, KEY_HEADER);
 
-        return new SetComplimentProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], attributes[1]);
+        return new SetComplimentProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0]);
     }
 
     private static ConcatColumnsProcessingNode concatColumnsDeserialize(JsonNode jsonContents, Map<String, String> defaults) {

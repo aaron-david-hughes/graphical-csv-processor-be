@@ -27,7 +27,8 @@ public class ConcatColumnsProcessingNode extends UnaryOperationNode {
 
         CorrespondingCSV csv1 = ColumnNameService.deduceColumnName(column1, csvData);
         CorrespondingCSV csv2 = ColumnNameService.deduceColumnName(column2, csvData);
+        String validatedHeader = ColumnNameService.validateColumnName(concatHeader);
 
-        return ConcatColumnsProcessor.concat(csv1.getCsv(), csv1.getColumnName(), csv2.getColumnName(), concatHeader);
+        return ConcatColumnsProcessor.concat(csv1.getCsv(), csv1.getColumnName(), csv2.getColumnName(), validatedHeader);
     }
 }

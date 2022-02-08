@@ -40,7 +40,7 @@ public class CsvProcessorService {
             throw new IllegalArgumentException("Problem with processing graph inputs");
         }
 
-        if (openFileCount == 0 ||openFileCount != csvData.size())
+        if (openFileCount == 0 || openFileCount != csvData.size())
             throw new IllegalArgumentException("Not all supplied files have a corresponding Open File Node.");
     }
 

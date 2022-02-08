@@ -14,6 +14,7 @@ public class Attributes {
     public static final String GROUP = "group";
     public static final String ID = "id";
     public static final String JOIN_TYPE = "joinType";
+    public static final String KEY_HEADER = "keyHeader";
     public static final String LIMIT = "limit";
     public static final String MERGE_COL_NAME = "mergeColName";
     public static final String MERGE_TYPE = "mergeType";
@@ -23,8 +24,6 @@ public class Attributes {
     public static final String ON_RIGHT = "onRight";
     public static final String OPERATION = "operation";
     public static final String ORDER_TYPE = "orderType";
-    public static final String SET_COLUMN = "setColumn";
-    public static final String SUBSET_COLUMN = "subsetColumn";
     public static final String VALUE = "value";
 
     private Attributes() {}

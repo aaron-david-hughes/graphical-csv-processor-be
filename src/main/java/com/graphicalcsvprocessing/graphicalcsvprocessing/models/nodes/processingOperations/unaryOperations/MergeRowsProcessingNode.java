@@ -1,7 +1,9 @@
 package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.unaryOperations;
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MergeRowsProcessor;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +23,9 @@ public class MergeRowsProcessingNode extends UnaryOperationNode {
     public CSV process(List<CSV> csvData) throws IOException {
         super.process(csvData);
 
-        return MergeRowsProcessor.mergeRow(csvData.get(0), column, value);
+        CorrespondingCSV csv = ColumnNameService.deduceColumnName(column, csvData);
+
+        return MergeRowsProcessor.mergeRow(csv.getCsv(), csv.getColumnName(), value);
     }
 
     public String getColumn() {
