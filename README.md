@@ -106,24 +106,24 @@ That is to emphasise **you cannot have loops in the supplied graph**
 Node Types
 ----------
 
-*   [Alias Node](#_alias-node_)
-*   [Concat Columns Node](#_concat-columns-node_)
-*   [Concat Tables Node](#_concat-tables-node_)
-*   [Drop Alias Node](#_drop-alias-node_)
-*   [Drop Columns Node](#_drop-columns-node_)
-*   [Filter Node](#_filter-node_)
-*   [Join Node](#_join-node_)
-*   [Limit Node](#_limit-node_)
-*   [Merge Columns Node](#_merge-columns-node_)
-*   [Merge Rows Node](#_merge-rows-node_)
-*   [Open File Node](#_open-file-node_)
-*   [Or Node](#_or-node_)
-*   [Order Column Node](#_order-column-node_)
-*   [Rename Column Node](#_rename-column-node_)
-*   [Set Compliment Node](#_set-compliment-node_)
-*   [Take Columns Node](#_take-columns-node_)
-*   [Unique Columns Node](#_unique-column-node_)
-*   [Write File Node](#_write-file-node_)
+*   [Alias Node](#user-content-alias-node)
+*   [Concat Columns Node](#user-content-concat-columns-node)
+*   [Concat Tables Node](#user-content-concat-tables-node)
+*   [Drop Alias Node](#user-content-drop-alias-node)
+*   [Drop Columns Node](#user-content-drop-columns-node)
+*   [Filter Node](#user-content-filter-node)
+*   [Join Node](#user-content-join-node)
+*   [Limit Node](#user-content-limit-node)
+*   [Merge Columns Node](#user-content-merge-columns-node)
+*   [Merge Rows Node](#user-content-merge-rows-node)
+*   [Open File Node](#user-content-open-file-node)
+*   [Or Node](#user-content-or-node)
+*   [Order Column Node](#user-content-order-column-node)
+*   [Rename Column Node](#user-content-rename-column-node)
+*   [Set Compliment Node](#user-content-set-compliment-node)
+*   [Take Columns Node](#user-content-take-columns-node)
+*   [Unique Columns Node](#user-content-unique-column-node)
+*   [Write File Node](#user-content-write-file-node)
 
 ### _Alias Node_
 
@@ -152,8 +152,8 @@ Node Types
 
 **Exceptions if:**
 
-*   Column1 or column2 cannot be [identified](#_identifying-columns_)
-*   Concat header is not [valid](#_valid-columns-names_)
+*   Column1 or column2 cannot be [identified](#user-content-identifying-columns)
+*   Concat header is not [valid](#user-content-valid-columns-names)
 
 ### _Concat Tables Node_
 
@@ -170,7 +170,7 @@ Node Types
 **Attributes:** 0  
 **Exceptions if:**
 
-*   Resultant csv does not have [unique](#_identifying-columns_) column headers
+*   Resultant csv does not have [unique](#user-content-identifying-columns) column headers
 
 ### _Drop Columns Node_
 
@@ -183,7 +183,7 @@ Node Types
 
 **Exceptions if:**
 
-*   Any column in list cannot be [identified](#_identifying-columns_)
+*   Any column in list cannot be [identified](#user-content-identifying-columns)
 
 ### _Filter Node_
 
@@ -205,7 +205,7 @@ Node Types
 
 **Exceptions if:**
 
-*   Any column in list cannot be [identified](#_identifying-columns_)
+*   Any column in list cannot be [identified](#user-content-identifying-columns)
 *   Condition requires double and cannot be parsed to double
 
 ### _Join Node_
@@ -226,7 +226,7 @@ Node Types
 
 **Exceptions if:**
 
-*   Either column specified cannot be [identified](#_identifying-columns_)
+*   Either column specified cannot be [identified](#user-content-identifying-columns)
 
 ### _Limit Node_
 
@@ -257,9 +257,9 @@ Node Types
 
 **Exceptions if:**
 
-*   Either column specified cannot be [identified](#_identifying-columns_)
-*   New column name is [invalid](#_valid-columns-names_)
-*   Data in two columns of any row [clash](#_clashing-data_)
+*   Either column specified cannot be [identified](#user-content-identifying-columns)
+*   New column name is [invalid](#user-content-valid-columns-names)
+*   Data in two columns of any row [clash](#user-content-clashing-data)
 
 ### _Merge Rows Node_
 
@@ -273,8 +273,8 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#_identifying-columns_)
-*   Data in rows [clash](#_clashing-data_)
+*   Column specified cannot be [identified](#user-content-identifying-columns)
+*   Data in rows [clash](#user-content-clashing-data)
 
 ### _Open File Node_
 
@@ -296,8 +296,8 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#_identifying-columns_) post concat
-*   Data in rows [clash](#_clashing-data_) on unique
+*   Column specified cannot be [identified](#user-content-identifying-columns) post concat
+*   Data in rows [clash](#user-content-clashing-data) on unique
 
 ### _Order Column Node_
 
@@ -315,7 +315,7 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#_identifying-columns_)
+*   Column specified cannot be [identified](#user-content-identifying-columns)
 
 ### _Rename Column Node_
 
@@ -329,8 +329,8 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#_identifying-columns_)
-*   New column name is [invalid](#_valid-columns-names_)
+*   Column specified cannot be [identified](#user-content-identifying-columns)
+*   New column name is [invalid](#user-content-valid-columns-names)
 
 ### _Set Compliment Node_
 
@@ -343,7 +343,7 @@ Node Types
 
 **Exceptions if:**
 
-*   Column specified cannot be [identified](#_identifying-columns_)
+*   Column specified cannot be [identified](#user-content-identifying-columns)
 *   Headers in two supplied files are not identical
 
 ### _Take Columns Node_
@@ -357,7 +357,7 @@ Node Types
 
 **Exceptions if:**
 
-*   Any column in list cannot be [identified](#_identifying-columns_)
+*   Any column in list cannot be [identified](#user-content-identifying-columns)
 
 ### _Unique Column Node_
 
@@ -370,8 +370,8 @@ Node Types
 
 **Exceptions if:**
 
-*   Column supplied cannot be [identified](#_identifying-columns_)
-*   Any of the row merges contain [clashing](#_clashing-data_) data
+*   Column supplied cannot be [identified](#user-content-identifying-columns)
+*   Any of the row merges contain [clashing](#user-content-clashing-data) data
 
 ### _Write File Node_
 
