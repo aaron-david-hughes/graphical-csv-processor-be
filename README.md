@@ -123,7 +123,7 @@ Node Types
 *   [Set Compliment Node](#set_compliment)
 *   [Take Columns Node](#take_columns)
 *   [Unique Columns Node](#unique_columns)
-*   [Write File Node](#_write-file-node_-a-idwrite_filea)
+*   [Write File Node](#write_file)
 
 ### _Alias Node_ <a id="alias"></a>
 
@@ -373,7 +373,7 @@ Node Types
 *   Column supplied cannot be [identified](#identifying_columns)
 *   Any of the row merges contain [clashing](#clashing_data) data
 
-### _Write File Node_ <a id="write_file"></a>
+### _Write File Node_ <a href="#write_file" id="write_file"></a>
 
 **Description:** Renames input file and ensures it is in the returned files in response. Useful in debugging queries too.  
 **Inputs:** 1 csv file.  
