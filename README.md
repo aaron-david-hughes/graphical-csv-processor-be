@@ -84,7 +84,7 @@ curl --location --request POST 'http://localhost:8080/process' \
 On a merge of any type, checks are taken to ensure cells don't lose genuine data.
 Genuine data is considered cells with non-empty string content.
 
-*   Matching genuine data in cells=> merge
+*   Matching genuine data in cells => merge
 *   Genuine data in one cell and empty or null in other => merge
 *   Non-matching genuine data in cells => exception
 
