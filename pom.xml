@@ -12,7 +12,8 @@
     <artifactId>graphical-csv-processing</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>graphical-csv-processing</name>
-    <description>Using graphical notation of nodes and edges to allow for easy user manipulation of csv data.
+    <description>
+        Using graphical notation of nodes and edges to allow for easy user interpretation and manipulation of csv data.
     </description>
     <properties>
         <java.version>11</java.version>
@@ -83,11 +84,6 @@
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
-        <dependency>
-            <groupId>org.openjdk.nashorn</groupId>
-            <artifactId>nashorn-core</artifactId>
-            <version>15.3</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -102,5 +98,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
