@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(value = IOException.class)
     protected ResponseEntity<Object> handleIOException(IOException ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         String body = "Problem with input files";
 
@@ -36,23 +37,31 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(value = IllegalArgumentException.class)
     protected ResponseEntity<Object> handleIllegalArgumentExceptions(IllegalArgumentException ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         return handleExceptionInternal(ex, ex.getMessage(), headers, HttpStatus.BAD_REQUEST, request);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(value = NumberFormatException.class)
-    protected ResponseEntity<Object> handleNumberFormatExceptions(IllegalArgumentException ex, WebRequest request) {
+    protected ResponseEntity<Object> handleNumberFormatExceptions(NumberFormatException ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         return handleExceptionInternal(ex, ex.getMessage(), headers, HttpStatus.BAD_REQUEST, request);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = Exception.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = MultipartException.class)
+    protected ResponseEntity<Object> handleNumberFormatExceptions(MultipartException ex, WebRequest request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        return handleExceptionInternal(ex, ex.getMessage(), headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = Throwable.class)
     protected ResponseEntity<Object> handleIllegalArgumentExceptions(Exception ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         return handleExceptionInternal(
                 ex, "A general processing error has occurred",
