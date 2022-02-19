@@ -6,6 +6,18 @@ This API is capable of returning multiple csvs from the same or separate data st
 
 ---
 
+Docker Quick Start
+------------------
+
+### Registry
+[Docker Hub](https://hub.docker.com/r/qub40232046/40232046-graphical-processing-be): qub40232046/40232046-graphical-processing-be  
+
+### Starting
+```shell
+docker run -d -p 8080:8080 -e APP_FRONTEND="{space-separated-list-cors-urls-allowed}" qub40232046/40232046-graphical-processing-be:{tag}
+```
+Note the APP_FRONTEND variable defaults to http://localhost:3000 so to enable quick running of the paired [frontend](https://hub.docker.com/r/qub40232046/40232046-graphical-processing-fe) application locally.  
+
 Integration Guide
 -----------------
 
