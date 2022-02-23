@@ -10,7 +10,7 @@ public class ColumnNameService {
     private ColumnNameService() {}
 
     public static String validateAlias(String alias) {
-        if (alias != null && alias.matches("^[a-zA-Z0-9].[a-zA-Z0-9 _-]*$")) {
+        if (alias != null && alias.matches("^[a-zA-Z0-9][a-zA-Z0-9 _-]*$")) {
             return alias;
         }
 
@@ -21,7 +21,7 @@ public class ColumnNameService {
     }
 
     public static String validateColumnName(String columnName) {
-        if (columnName != null && columnName.matches("^[a-zA-Z0-9].[a-zA-Z0-9 _-]*(\\.[a-zA-Z0-9 _-]+)?$")) {
+        if (columnName != null && columnName.matches("^[a-zA-Z0-9][a-zA-Z0-9 _-]*([.][a-zA-Z0-9][a-zA-Z0-9 _-]*)?$")) {
             return columnName;
         }
 

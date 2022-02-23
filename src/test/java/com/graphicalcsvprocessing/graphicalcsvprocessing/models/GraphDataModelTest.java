@@ -26,8 +26,8 @@ public class GraphDataModelTest {
                 "join",
                 "processing",
                 "join",
-                "Attendance.Attendant",
-                "Scores.StudentNum",
+                "Attendant",
+                "StudentNum",
                 JoinProcessor.JoinType.LEFT
         ),
         new WriteFileNode("write", "files", "write_file", "Renamed.csv")

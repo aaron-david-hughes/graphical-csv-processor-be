@@ -18,7 +18,7 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processing
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Operations.*;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Attributes.*;
@@ -30,7 +30,7 @@ import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.Merge
 
 public class NodeDeserializer extends StdDeserializer<Node> {
 
-    private static final Map<String, BiFunction<JsonNode, Map<String, String>, Node>> operationDeserialize = new HashMap<>();
+    private static final Map<String, Function<JsonNode, Node>> operationDeserialize = new HashMap<>();
 
     static {
         operationDeserialize.put(Operations.ALIAS, NodeDeserializer::aliasDeserialize);
@@ -55,8 +55,6 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         operationDeserialize.put(WRITE_FILE, NodeDeserializer::writeFileDeserialize);
     }
 
-    private final Map<String, String> defaultValues = GraphDataModelDeserializer.getRequestDefaultValues(Thread.currentThread().getId());
-
     @SuppressWarnings("unused")
     public NodeDeserializer() {
         this(null);
@@ -71,14 +69,14 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         JsonNode jsonContents = jsonParser.getCodec().readTree(jsonParser);
 
         try {
-            String operation = jsonContents.get("operation").asText();
+            String operation = jsonContents.get(OPERATION).asText();
 
             return operationDeserialize.getOrDefault(
                 operation,
-                (json, defaults) -> {
+                json -> {
                     throw new IllegalArgumentException("No nodes matching operation: " + operation);
                 }
-            ).apply(jsonContents, defaultValues);
+            ).apply(jsonContents);
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("Node missing necessary attribute - refer to README.md", e);
         }
@@ -92,19 +90,10 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         };
     }
 
-    private static String[] getSpecificAttributes(JsonNode jsonContents, Map<String, String> defaults, String... attributes) {
+    private static String[] getSpecificAttributes(JsonNode jsonContents, String... attributes) {
         String[] output = new String[attributes.length];
 
-        for (int i = 0; i < attributes.length; i++) {
-            try {
-                output[i] = jsonContents.get(attributes[i]).asText();
-            } catch (NullPointerException e) {
-                if (!defaults.containsKey(attributes[i]))
-                    throw new IllegalArgumentException("Node missing necessary attribute - refer to README.md", e);
-
-                output[i] = defaults.get(attributes[i]);
-            }
-        }
+        for (int i = 0; i < attributes.length; i++) output[i] = jsonContents.get(attributes[i]).asText();
 
         return output;
     }
@@ -113,147 +102,147 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         return s.replaceAll("\\s*,\\s*", ",").split(",");
     }
 
-    private static OpenFileNode openFileDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static OpenFileNode openFileDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, NAME);
+        String[] attributes = getSpecificAttributes(jsonContents, NAME);
 
         return new OpenFileNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0]);
     }
 
-    private static WriteFileNode writeFileDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static WriteFileNode writeFileDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, NAME);
+        String[] attributes = getSpecificAttributes(jsonContents, NAME);
 
         return new WriteFileNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0]);
     }
 
-    private static JoinProcessingNode joinDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static JoinProcessingNode joinDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, ON_LEFT, ON_RIGHT, JOIN_TYPE);
+        String[] attributes = getSpecificAttributes(jsonContents, ON_LEFT, ON_RIGHT, JOIN_TYPE);
         JoinType joinType = JoinType.valueOf(attributes[2].toUpperCase());
 
         return new JoinProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], attributes[1], joinType);
     }
 
-    private static FilterProcessingNode filterDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static FilterProcessingNode filterDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMN, CONDITION, FILTER_TYPE, EQUAL);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN, CONDITION, FILTER_TYPE, EQUAL);
         FilterType filterType = FilterType.valueOf(attributes[2].toUpperCase());
         boolean equal = Boolean.parseBoolean(attributes[3]);
 
         return new FilterProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], attributes[1], filterType, equal);
     }
 
-    private static DropColumnProcessingNode dropColumnDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static DropColumnProcessingNode dropColumnDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] columns = splitCommaSeparatedList(getSpecificAttributes(jsonContents, defaults, COLUMNS)[0]);
+        String[] columns = splitCommaSeparatedList(getSpecificAttributes(jsonContents, COLUMNS)[0]);
 
         return new DropColumnProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], columns);
     }
 
-    private static TakeColumnProcessingNode takeColumnDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static TakeColumnProcessingNode takeColumnDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] columns = splitCommaSeparatedList(getSpecificAttributes(jsonContents, defaults, COLUMNS)[0]);
+        String[] columns = splitCommaSeparatedList(getSpecificAttributes(jsonContents, COLUMNS)[0]);
 
         return new TakeColumnProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], columns);
     }
 
-    private static AliasProcessingNode aliasDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static AliasProcessingNode aliasDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, Attributes.ALIAS);
+        String[] attributes = getSpecificAttributes(jsonContents, Attributes.ALIAS);
 
         return new AliasProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0]);
     }
 
-    private static RenameColumnProcessingNode renameDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static RenameColumnProcessingNode renameDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMN, NEW_NAME);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN, NEW_NAME);
 
         return new RenameColumnProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], attributes[1]);
     }
 
-    private static MergeColumnsProcessingNode mergeColumnsDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static MergeColumnsProcessingNode mergeColumnsDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMN_1, COLUMN_2, MERGE_COL_NAME, MERGE_TYPE);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN_1, COLUMN_2, MERGE_COL_NAME, MERGE_TYPE);
         MergeType mergeType = MergeType.valueOf(attributes[3].toUpperCase());
 
         return new MergeColumnsProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], attributes[1], attributes[2], mergeType);
     }
 
-    private static MergeRowsProcessingNode mergeRowsDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static MergeRowsProcessingNode mergeRowsDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMN, VALUE);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN, VALUE);
 
         return new MergeRowsProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], attributes[1]);
     }
 
-    private static LimitProcessingNode limitDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static LimitProcessingNode limitDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        int limit = Integer.parseInt(getSpecificAttributes(jsonContents, defaults, Attributes.LIMIT)[0]);
+        int limit = Integer.parseInt(getSpecificAttributes(jsonContents, Attributes.LIMIT)[0]);
 
         return new LimitProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], limit);
     }
 
-    private static ConcatTablesProcessingNode concatTableDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static ConcatTablesProcessingNode concatTableDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
 
         return new ConcatTablesProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2]);
     }
 
-    private static UniqueColumnProcessingNode uniqueColumnDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static UniqueColumnProcessingNode uniqueColumnDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMN);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN);
 
         return new UniqueColumnProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0]);
     }
 
-    private static OrProcessingNode orDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static OrProcessingNode orDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMN);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN);
 
         return new OrProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0]);
     }
 
-    private static OrderColumnProcessingNode orderColumnDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static OrderColumnProcessingNode orderColumnDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMN, ORDER_TYPE);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN, ORDER_TYPE);
         OrderType orderType = OrderType.valueOf(attributes[1].toUpperCase());
 
         return new OrderColumnProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], orderType);
     }
 
-    private static DropAliasProcessingNode dropAliasDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static DropAliasProcessingNode dropAliasDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
 
         return new DropAliasProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2]);
     }
 
-    private static SetComplimentProcessingNode setComplimentDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static SetComplimentProcessingNode setComplimentDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, KEY_HEADER);
+        String[] attributes = getSpecificAttributes(jsonContents, KEY_HEADER);
 
         return new SetComplimentProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0]);
     }
 
-    private static ConcatColumnsProcessingNode concatColumnsDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static ConcatColumnsProcessingNode concatColumnsDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMN_1, COLUMN_2, CONCAT_HEADER);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN_1, COLUMN_2, CONCAT_HEADER);
 
         return new ConcatColumnsProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], attributes[1], attributes[2]);
     }
 
-    private static RowMathProcessingNode rowMathDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static RowMathProcessingNode rowMathDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMNS, NEW_NAME, MATH_OPERATION);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMNS, NEW_NAME, MATH_OPERATION);
         String[] columns = splitCommaSeparatedList(attributes[0]);
         StatisticalType mathOp = StatisticalType.valueOf(attributes[2].toUpperCase());
 
         return new RowMathProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], columns, attributes[1], mathOp);
     }
 
-    private static ColumnMathProcessingNode columnMathDeserialize(JsonNode jsonContents, Map<String, String> defaults) {
+    private static ColumnMathProcessingNode columnMathDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
-        String[] attributes = getSpecificAttributes(jsonContents, defaults, COLUMN, MATH_OPERATION);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN, MATH_OPERATION);
         StatisticalType mathOp = StatisticalType.valueOf(attributes[1].toUpperCase());
 
         return new ColumnMathProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], mathOp);

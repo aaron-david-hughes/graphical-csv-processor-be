@@ -27,9 +27,9 @@ public class JoinProcessorTest {
 
     private JoinProcessingNode j;
 
-    private final String leftCol = "Attendance.Attendant";
+    private final String leftCol = "Attendant";
 
-    private final String rightCol = "Scores.StudentNum";
+    private final String rightCol = "StudentNum";
 
     @Before
     public void setUp() throws IOException {
@@ -178,7 +178,7 @@ public class JoinProcessorTest {
             fail("Expected an IllegalArgumentException to be thrown");
         } catch (IllegalArgumentException e) {
             assertEquals(
-                    "Mapping for Attendance.Attendant not found, expected one of [Scores.StudentNum, Scores.Score]",
+                    "Mapping for Attendant not found, expected one of [StudentNum, Score]",
                     e.getMessage()
             );
         }

@@ -22,19 +22,5 @@ public class Operations {
     public static final String UNIQUE_COLUMN = "unique_column";
     public static final String WRITE_FILE = "write_file";
 
-    //collective csv functions (will take all rows and produce one => and potentially return a single col and single entry)
-    //avg => mathematical
-    //max => mathematical
-    //min => mathematical
-    //count => number of records
-
     private Operations() {}
 }
-
-
-
-/*
-ultimately
-concatenation will need to cover the adding two instances of the same table with diff data => avoiding duplicate entries
-this is to say regardless
- */

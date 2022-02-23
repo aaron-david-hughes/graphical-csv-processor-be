@@ -71,17 +71,6 @@ public class CsvProcessorServiceTest {
     }
 
     @Test
-    public void readInputCsvListThrowsIllegalArgumentExceptionWhenEmptyFileSupplied() throws IOException {
-        MultipartFile[] multipartFiles = new TestCSVBuilder().prepareMockMultipartFileArray("Empty.csv");
-        try {
-            csvProcessorService.readInputCsvList(multipartFiles);
-            fail("Expected an Illegal Argument Exception to be thrown");
-        } catch (IllegalArgumentException e) {
-            assertEquals("File 'Empty.csv' is empty.", e.getMessage());
-        }
-    }
-
-    @Test
     public void readInputCsvListReturnsSingletonMapWhenSingleFileSupplied() throws IOException {
         Map<String, CSV> csvData = csvProcessorService.readInputCsvList(
                 new TestCSVBuilder().prepareMockMultipartFileArray("Attendance.csv"));
@@ -100,40 +89,6 @@ public class CsvProcessorServiceTest {
         validateCsv(csvData, "Attendance.csv");
         validateCsv(csvData, "AttendanceUsingStudentNumber.csv");
         validateCsv(csvData, "Scores.csv");
-    }
-
-    @Test
-    public void readInputCsvListThrowsIllegalArgumentExceptionWhenFilenameIsInvalidAsAnIdentifier() throws IOException {
-        String[] invalidFilenamesForIdentifiers = {null, "", " ", "     ", "\n"};
-
-        for (String s : invalidFilenamesForIdentifiers) {
-            File file = new File("src/test/resources/Attendance.csv");
-            MockMultipartFile f = new MockMultipartFile(
-                    "name", s, MediaType.TEXT_PLAIN_VALUE, Files.readAllBytes(file.toPath()));
-
-            try {
-                csvProcessorService.readInputCsvList(new MultipartFile[] {f});
-                fail("Expected an illegal argument exception to be thrown");
-            } catch (IllegalArgumentException e) {
-                assertEquals("Alias supplied (may be a filename) of input file must start with a letter and " +
-                        "contain only a-z, A-Z, 0-9, space, underscore, hyphen.", e.getMessage());
-            }
-        }
-    }
-
-    @Test
-    public void readInputCsvListThrowsIllegalArgumentExceptionWhenFilenameIsNull() throws IOException {
-        File file = new File("src/test/resources/Attendance.csv");
-        MockMultipartFile f = new MockMultipartFile(
-                "null", null, MediaType.TEXT_PLAIN_VALUE, Files.readAllBytes(file.toPath()));
-
-        try {
-            csvProcessorService.readInputCsvList(new MultipartFile[] {f});
-            fail("Expected an illegal argument exception to be thrown");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Alias supplied (may be a filename) of input file must start with a letter and " +
-                    "contain only a-z, A-Z, 0-9, space, underscore, hyphen.", e.getMessage());
-        }
     }
 
     @Test
@@ -250,7 +205,7 @@ public class CsvProcessorServiceTest {
                 new OpenFileNode("open2", "files", "open_file", "Scores.csv"),
                 new JoinProcessingNode(
                         "join1", "processing", "join",
-                        "Scores.StudentNum", "Attendance.Attendant", JoinProcessor.JoinType.LEFT
+                        "StudentNum", "Attendant", JoinProcessor.JoinType.LEFT
                 )
         }, new Edge[] {
                 new Edge("open1", "join1"),

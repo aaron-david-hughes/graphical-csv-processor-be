@@ -65,6 +65,12 @@
             <version>3.8.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.1</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- simply will use this dependency to compare results -->
         <dependency>
