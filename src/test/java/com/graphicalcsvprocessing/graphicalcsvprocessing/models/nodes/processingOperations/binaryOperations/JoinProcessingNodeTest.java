@@ -58,6 +58,7 @@ public class JoinProcessingNodeTest {
         }
     }
 
+    @Test
     public void shouldThrowIllegalArgumentExceptionIfDataSuppliedIsHigherThanExpected() {
         when(csvData.size()).thenReturn(3);
 

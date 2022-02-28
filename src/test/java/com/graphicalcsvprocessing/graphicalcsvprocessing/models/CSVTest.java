@@ -21,7 +21,6 @@ public class CSVTest {
 
     @Before
     public void setUp() throws IOException {
-        //TODO create a csv parser genuinely as this will make the unit test much easier - or mock a lot - either may be ok
         File file = new File("src/test/resources/Attendance.csv");
         MockMultipartFile f = new MockMultipartFile(
                 "Attendance.csv",
@@ -35,6 +34,32 @@ public class CSVTest {
         );
 
         csv = new CSV(new CSVParser(reader, CSVFormat.Builder.create().setHeader().build()));
+    }
+
+    @Test
+    public void partConstructorValidation() {
+        CSV csvCopy = new CSV(csv.getHeaders(), csv.getHeaderMap(), csv.getRecords());
+
+        assertNotNull(csvCopy);
+        assertEquals(csvCopy.getHeaders().size(), csv.getHeaders().size());
+        assertEquals(csvCopy.getHeaders().toString(), csv.getHeaders().toString());
+        assertEquals(csvCopy.getHeaderMap().size(), csv.getHeaderMap().size());
+        assertEquals(csvCopy.getHeaderMap().toString(), csv.getHeaderMap().toString());
+        assertEquals(csvCopy.getRecords().size(), csv.getRecords().size());
+        assertArrayEquals(csvCopy.getRecords().toArray(), csv.getRecords().toArray());
+    }
+
+    @Test
+    public void copyConstructorValidation() {
+        CSV csvCopy = new CSV(csv);
+
+        assertNotNull(csvCopy);
+        assertEquals(csvCopy.getHeaders().size(), csv.getHeaders().size());
+        assertEquals(csvCopy.getHeaders().toString(), csv.getHeaders().toString());
+        assertEquals(csvCopy.getHeaderMap().size(), csv.getHeaderMap().size());
+        assertEquals(csvCopy.getHeaderMap().toString(), csv.getHeaderMap().toString());
+        assertEquals(csvCopy.getRecords().size(), csv.getRecords().size());
+        assertArrayEquals(csvCopy.getRecords().toArray(), csv.getRecords().toArray());
     }
 
     @Test

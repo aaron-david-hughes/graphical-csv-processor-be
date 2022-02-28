@@ -35,11 +35,13 @@ public class AliasProcessor {
         List<String> headers = input.getHeaders();
         Set<String> duplicateHeaderCheck = new HashSet<>();
 
-        for (String header : headers) {
+        for (int i = 0; i < headers.size(); i++) {
+            String header = headers.get(i);
             int idx = header.indexOf('.');
 
             if (idx >= 0 && idx < header.length() - 1) {
                 header = header.substring(idx + 1);
+                headers.set(i, header);
             }
 
             duplicateHeaderCheck.add(header);
