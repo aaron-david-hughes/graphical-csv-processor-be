@@ -20,6 +20,7 @@ docker_image:
     - docker:19.03.1-dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD docker.io
-    - docker buildx create --name builder
-    - docker buildx use builder
+    - export DOCKER_CLI_EXPERIMENTAL=enabled
+#    - docker buildx create --name builder
+#    - docker buildx use builder
     - docker buildx build --push --platform linux/arm64,linux/amd64 --tag $IMAGE_NAME .
