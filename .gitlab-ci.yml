@@ -13,14 +13,14 @@ variables:
 #    - mvn test
 
 docker_image:
-  image: docker:19.03.1
+  image: docker:20.10.7
   stage: build_and_test
   tags: [dind]
   services:
-    - docker:19.03.1-dind
+    - docker:20.10.7-dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD docker.io
     - export DOCKER_CLI_EXPERIMENTAL=enabled
-#    - docker buildx create --name builder
-#    - docker buildx use builder
+    - docker buildx create --name builder
+    - docker buildx use builder
     - docker buildx build --push --platform linux/arm64,linux/amd64 --tag $IMAGE_NAME .
