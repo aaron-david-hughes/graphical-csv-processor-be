@@ -28,7 +28,7 @@ variables:
 #    - docker buildx build --push --platform linux/arm64,linux/amd64 --tag $IMAGE_NAME .
 
 docker-build-master:
-  image: guglio/dind-buildx:latest
+  image: gcrowsbyte/buildx-test:latest
   stage: build_and_test
   tags: [dind]
   services:
