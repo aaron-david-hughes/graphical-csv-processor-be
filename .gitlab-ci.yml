@@ -1,10 +1,22 @@
 image: maven:3.8.4-jdk-11-slim
 
 stages:
-  - test
+  - build_and_test
+
+variables:
+  IMAGE_NAME: qub40232046/40232046-graphical-processing-be:$CI_COMMIT_SHORT_SHA
 
 unit_tests:
-  stage: test
+  stage: build_and_test
   tags: [backend]
   script:
     - mvn test
+
+docker_image:
+  image: docker:latest
+  stage: build_and_test
+  tags: [backend]
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - docker build -t $IMAGE_NAME .
+    - docker push $IMAGE_NAME
