@@ -6,11 +6,11 @@ stages:
 variables:
   IMAGE_NAME: qub40232046/40232046-graphical-processing-be:$CI_COMMIT_SHORT_SHA
 
-unit_tests:
-  stage: build_and_test
-  tags: [backend]
-  script:
-    - mvn test
+#unit_tests:
+#  stage: build_and_test
+#  tags: [backend]
+#  script:
+#    - mvn test
 
 docker_image:
   image: docker:latest
