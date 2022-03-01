@@ -1,45 +1,10 @@
 image: maven:3.8.4-jdk-11-slim
 
 stages:
-  - build_and_test
+  - unit_test
 
-variables:
-  IMAGE_NAME: qub40232046/40232046-graphical-processing-be:$CI_COMMIT_SHORT_SHA
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
-
-#unit_tests:
-#  stage: build_and_test
-#  tags: [backend]
-#  script:
-#    - mvn test
-
-#docker_image:
-#  image: docker:20.10.7
-#  stage: build_and_test
-#  tags: [dind]
-#  services:
-#    - docker:20.10.7-dind
-#  script:
-#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD docker.io
-##    - export DOCKER_CLI_EXPERIMENTAL=enabled
-##    - docker buildx version
-#    - docker buildx create --use
-#    - docker buildx build --push --platform linux/arm64,linux/amd64 --tag $IMAGE_NAME .
-
-docker-build-master:
-  image: docker:20.10.7
-  stage: build_and_test
-  tags: [dind]
-  services:
-    - docker:20.10-dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" docker.io
+unit_tests:
+  stage: unit_test
+  tags: [backend]
   script:
-#    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes; docker buildx create --use
-#    - docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag "$CI_REGISTRY_IMAGE" .
-    - sudo apt install curl
-    - curl -O https://objects.githubusercontent.com/github-production-release-asset-2e65be/177210627/a88bda85-b685-4e7f-b8ee-57474f665604?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20220301%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220301T164044Z&X-Amz-Expires=300&X-Amz-Signature=bc1d53d13f6d2945f6397cefe89fcf59d9009c9ee9fcef084bfdbc2cec03c359&X-Amz-SignedHeaders=host&actor_id=77301596&key_id=0&repo_id=177210627&response-content-disposition=attachment%3B%20filename%3Dbuildx-v0.8.0-rc1.linux-arm64&response-content-type=application%2Foctet-stream
-    - wc -l buildx-v0.8.0-rc1.linux-arm64
-  only:
-    - master
+    - mvn test
