@@ -13,7 +13,7 @@ variables:
 #    - mvn test
 
 docker_image:
-  image: jdrouet/docker-with-buildx:stable
+  image: docker:20.10.7
   stage: build_and_test
   tags: [dind]
   services:
