@@ -1,27 +1,7 @@
 image: maven:3.8.4-jdk-11-slim
 
 stages:
-  - docker_build
   - unit_test
-
-build_image:
-  image: docker:stable
-  stage: docker_build
-  tags: [backend]
-  services:
-    - name: docker:dind
-      alias: dockerdaemon
-  variables:
-    # Tell docker CLI how to talk to Docker daemon. should make containers ran accessible via dockerdaemon:<port>
-    DOCKER_HOST: tcp://dockerdaemon:2375/
-    # Use the overlayfs driver for improved performance.
-    DOCKER_DRIVER: overlay2
-    # Disable TLS since we're running inside local network.
-    DOCKER_TLS_CERTDIR: ""
-  before_script:
-    - docker info
-  script:
-      - docker info
 
 unit_tests:
   image: docker:stable
