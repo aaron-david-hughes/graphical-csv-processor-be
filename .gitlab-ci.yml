@@ -6,5 +6,10 @@ stages:
 unit_tests:
   stage: unit_test
   tags: [backend]
+  before_script:
+    - docker info
   script:
     - mvn test
+
+# will execute integration tests here also
+# tried and failed with docker multi arch builds => not necessary can be a future improvement
