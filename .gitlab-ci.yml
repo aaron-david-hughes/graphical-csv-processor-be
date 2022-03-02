@@ -4,7 +4,6 @@ stages:
   - unit_test
 
 unit_tests:
-  image: docker:stable
   stage: unit_test
   tags: [backend]
   script:
