@@ -9,11 +9,10 @@ build_test_image:
   stage: test_image
   tags: [dind]
   variables:
-    DOCKER_HOST: tcp://dockerdaemon:2376
+#    DOCKER_HOST: tcp://dockerdaemon:2376 this is not currently the host due to cert issues - it is tcp://docker:2376
     DOCKER_TLS_CERTDIR: "/certs"
   services:
-    - name: docker:19.03.1-dind
-      alias: dockerdaemon
+    - docker:19.03.1-dind
   script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER docker.io --password-stdin
     - docker build -t $CI_REGISTRY:$CI_COMMIT_SHORT_SHA .
