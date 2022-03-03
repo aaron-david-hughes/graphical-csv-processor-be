@@ -2,7 +2,8 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processin
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.ConcatTablesProcessor;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.JoinProcessor;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.SetProcessor;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,13 +13,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ConcatTablesProcessingNodeTest {
+public class SetComplimentProcessingNodeTest {
 
     @Mock
     List<CSV> csvData;
@@ -32,8 +34,11 @@ public class ConcatTablesProcessingNodeTest {
     @Mock
     CSV input2;
 
-    ConcatTablesProcessingNode node = new ConcatTablesProcessingNode(
-            "testId", "testProcessing", "concat_tables"
+    SetComplimentProcessingNode node = new SetComplimentProcessingNode(
+            "testId",
+            "processing",
+            "set_compliment",
+            "testCol"
     );
 
     @Test
@@ -71,16 +76,21 @@ public class ConcatTablesProcessingNodeTest {
     }
 
     @Test
-    public void shouldReturnResultOfConcatTablesProcessingIfCorrectNumberOfDataElementsIsCorrect() {
+    public void shouldReturnResultOfSetComplimentProcessingIfCorrectNumberOfDataElementsIsCorrect() {
         when(csvData.size()).thenReturn(2);
         when(csvData.get(0)).thenReturn(input1);
         when(csvData.get(1)).thenReturn(input2);
 
         try (
-                MockedStatic<ConcatTablesProcessor> concatTablesProcessorMockedStatic = Mockito.mockStatic(ConcatTablesProcessor.class)
+                MockedStatic<SetProcessor> setProcessorMockedStatic = Mockito.mockStatic(SetProcessor.class);
+                MockedStatic<ColumnNameService> columnNameServiceMockedStatic = Mockito.mockStatic(ColumnNameService.class)
         ) {
-            concatTablesProcessorMockedStatic
-                    .when(() -> ConcatTablesProcessor.concat(input1, input2))
+            columnNameServiceMockedStatic
+                    .when(() -> ColumnNameService.deduceColumnName("testCol", Collections.singletonList(input2)))
+                    .thenReturn(new CorrespondingCSV("deducedTestLeft", input2));
+
+            setProcessorMockedStatic
+                    .when(() -> SetProcessor.getCompliment(input2, input1, "deducedTestLeft"))
                     .thenReturn(csv);
 
             CSV result = node.process(csvData);
