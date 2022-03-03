@@ -6,6 +6,7 @@ stages:
 
 build_test_image:
   image: docker:19.03.1
+  stage: test_image
   tags: [dind]
   services:
     - name: docker:19.03.1-dind
