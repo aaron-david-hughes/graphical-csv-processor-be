@@ -18,6 +18,9 @@ public class SetProcessor implements Processor {
 
         List<CSVRecord> records = set.getRecords();
         List<CSVRecord> subsetRecords = subset.getRecords();
+
+        if (records.isEmpty() || subsetRecords.isEmpty()) return set;
+
         int setHeaderIdx = set.getHeaderMap().get(keyHeader);
         int subsetHeaderIdx = subset.getHeaderMap().get(keyHeader);
 

@@ -25,10 +25,7 @@ public class JoinProcessingNode extends BinaryOperationNode {
 
     @Override
     public CSV process(List<CSV> csvData) throws IOException {
-        if (this.getAllowedNumberEdges() != csvData.size()) {
-            throw new IllegalArgumentException("Join node with incorrect number of inputs, expected '" +
-                this.getAllowedNumberEdges() + "', but received '" + csvData.size() + "'");
-        }
+        super.process(csvData);
 
         return JoinProcessor.join(this, orderData(csvData));
     }

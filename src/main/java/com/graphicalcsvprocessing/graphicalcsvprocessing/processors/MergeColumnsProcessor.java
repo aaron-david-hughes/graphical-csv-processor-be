@@ -31,7 +31,6 @@ public class MergeColumnsProcessor implements Processor {
 
         StringBuilder sb = new StringBuilder().append(listToString(headers)).append("\n");
 
-
         for (CSVRecord csvRecord : input.getRecords()) {
             List<String> cells = new ArrayList<>(csvRecord.toList());
 

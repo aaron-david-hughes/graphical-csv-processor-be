@@ -346,9 +346,9 @@ Node Types
 
 ### _Set Compliment Node_
 
-**Description:** Returns the complimentary set of subset compared to super set using key header as indicator for which fields are present. Note bigger csv supplied assumed as super set.  
+**Description:** Returns the complimentary set of subset compared to super set using key header as indicator for which fields are present. Note bigger csv supplied assumed as super set. Worthy of note is that the assumption is the column specified is unique.  
 **Inputs:** 2 csv files.  
-**Outputs:** Complimentary set of the subset compared to the super set.  
+**Outputs:** Complimentary set of the subset compared to the super set. If either set passed in is empty it will output the csv passed as the outer set.  
 **Attributes:** 1
 
 *   String: key header

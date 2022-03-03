@@ -2,7 +2,7 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processin
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.JoinProcessor;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.ConcatTablesProcessor;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,10 +15,11 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class JoinProcessingNodeTest {
+public class ConcatTablesProcessingNodeTest {
 
     @Mock
     List<CSV> csvData;
@@ -27,18 +28,13 @@ public class JoinProcessingNodeTest {
     CSV csv;
 
     @Mock
-    CSV left;
+    CSV input1;
 
     @Mock
-    CSV right;
+    CSV input2;
 
-    JoinProcessingNode j = new JoinProcessingNode(
-            "testId",
-            "processing",
-            "join",
-            "testLeft",
-            "testRight",
-            JoinProcessor.JoinType.LEFT
+    ConcatTablesProcessingNode node = new ConcatTablesProcessingNode(
+            "testId", "testProcessing", "concat_tables"
     );
 
     @Test
@@ -46,13 +42,13 @@ public class JoinProcessingNodeTest {
         when(csvData.size()).thenReturn(1);
 
         try {
-            j.process(csvData);
+            node.process(csvData);
             fail("Expected IllegalArgumentException");
         } catch (IOException e) {
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertEquals(
-                    "Node 'testId' with incorrect number of inputs, expected '2', but received '1'",
+                    "Join node with incorrect number of inputs, expected '2', but received '1'",
                     e.getMessage()
             );
         }
@@ -63,13 +59,13 @@ public class JoinProcessingNodeTest {
         when(csvData.size()).thenReturn(3);
 
         try {
-            j.process(csvData);
+            node.process(csvData);
             fail("Expected IllegalArgumentException");
         } catch (IOException e) {
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertEquals(
-                    "Node 'testId' with incorrect number of inputs, expected '2', but received '3'",
+                    "Join node with incorrect number of inputs, expected '2', but received '3'",
                     e.getMessage()
             );
         }
@@ -78,24 +74,17 @@ public class JoinProcessingNodeTest {
     @Test
     public void shouldReturnResultOfJoinProcessingIfCorrectNumberOfDataElementsIsCorrect() {
         when(csvData.size()).thenReturn(2);
+        when(csvData.get(0)).thenReturn(input1);
+        when(csvData.get(1)).thenReturn(input2);
 
         try (
-            MockedStatic<JoinProcessor> joinProcessorMockedStatic = Mockito.mockStatic(JoinProcessor.class);
-            MockedStatic<ColumnNameService> columnNameServiceMockedStatic = Mockito.mockStatic(ColumnNameService.class)
+                MockedStatic<ConcatTablesProcessor> concatTablesProcessorMockedStatic = Mockito.mockStatic(ConcatTablesProcessor.class)
         ) {
-            columnNameServiceMockedStatic
-                    .when(() -> ColumnNameService.deduceColumnName("testLeft", csvData))
-                    .thenReturn(new CorrespondingCSV("", left));
-
-            columnNameServiceMockedStatic
-                    .when(() -> ColumnNameService.deduceColumnName("testRight", csvData))
-                    .thenReturn(new CorrespondingCSV("", right));
-
-            joinProcessorMockedStatic
-                    .when(() -> JoinProcessor.join(j, new CSV[] {left, right}))
+            concatTablesProcessorMockedStatic
+                    .when(() -> ConcatTablesProcessor.concat(input1, input2))
                     .thenReturn(csv);
 
-            CSV result = j.process(csvData);
+            CSV result = node.process(csvData);
 
             assertEquals(csv, result);
         } catch (IOException e) {
@@ -103,23 +92,4 @@ public class JoinProcessingNodeTest {
         }
     }
 
-    @Test
-    public void testGetLeftCol() {
-        assertEquals("testLeft", j.getLeftCol());
-    }
-
-    @Test
-    public void testGetRightCol() {
-        assertEquals("testRight", j.getRightCol());
-    }
-
-    @Test
-    public void testGetJoinType() {
-        assertEquals(JoinProcessor.JoinType.LEFT, j.getJoinType());
-    }
-
-    @Test
-    public void testNumberOfInboundEdgesAllowedIsBinary() {
-        assertEquals(2, j.getAllowedNumberEdges());
-    }
 }

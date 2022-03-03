@@ -40,7 +40,7 @@ public class OrderColumnProcessor implements Processor {
         }),
         NUMERIC_ORDER_DESC((input, columnIdx) -> {
             List<CSVRecord> records = input.getRecords();
-            records.sort((record1, record2) -> String.CASE_INSENSITIVE_ORDER.compare(record1.get(columnIdx), record2.get(columnIdx)));
+            records.sort(Comparator.comparingDouble(csvRecord -> Double.parseDouble(csvRecord.get(columnIdx))));
             Collections.reverse(records);
             return records;
         });

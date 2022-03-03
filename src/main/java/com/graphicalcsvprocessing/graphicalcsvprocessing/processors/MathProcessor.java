@@ -57,7 +57,6 @@ public class MathProcessor implements Processor {
         return createCSV(sb);
     }
 
-    @SuppressWarnings("unused")
     public enum StatisticalType {
         AVERAGE(DoubleSummaryStatistics::getAverage),
         COUNT(doubleSummaryStatistics -> Double.valueOf(doubleSummaryStatistics.getCount())),

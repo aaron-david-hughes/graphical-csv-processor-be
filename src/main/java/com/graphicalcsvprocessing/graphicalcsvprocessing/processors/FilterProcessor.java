@@ -31,7 +31,6 @@ public class FilterProcessor implements Processor {
         return new CSV(operand.getHeaders(), operand.getHeaderMap(), node.isEqual() ? matches : notMatches);
     }
 
-    @SuppressWarnings("unused")
     public enum FilterType {
         STRING_EQUALITY(String::equals),
         NUMERIC_EQUALITY((c, v) -> {

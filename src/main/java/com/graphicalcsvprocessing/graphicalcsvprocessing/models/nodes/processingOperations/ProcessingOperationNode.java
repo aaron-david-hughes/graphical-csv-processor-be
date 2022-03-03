@@ -13,7 +13,7 @@ public abstract class ProcessingOperationNode extends Node {
 
     public CSV process(List<CSV> csvData) throws IOException {
         if (this.getAllowedNumberEdges() != csvData.size()) {
-            throw new IllegalArgumentException("Unary node '" + this.getId() + "' with incorrect number of inputs, expected '" +
+            throw new IllegalArgumentException("Node '" + this.getId() + "' with incorrect number of inputs, expected '" +
                     this.getAllowedNumberEdges() + "', but received '" + csvData.size() + "'");
         }
 

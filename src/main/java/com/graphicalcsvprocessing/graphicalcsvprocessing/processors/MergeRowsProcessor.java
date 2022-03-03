@@ -33,6 +33,10 @@ public class MergeRowsProcessor implements Processor {
             }
         }
 
+        if (mergeIndexes.size() < 2) return input;
+
+        rows.removeAll(mergeIndexes.stream().map(rows::get).collect(Collectors.toList()));
+
         List<String> outcomeRow = merge(input, mergeIndexes);
 
         StringBuilder sb = new StringBuilder().append(listToString(input.getHeaders())).append("\n");
@@ -47,12 +51,9 @@ public class MergeRowsProcessor implements Processor {
         return createCSV(sb);
     }
 
-    //offset should be recursively passed in row size minus (size of merged rows before - 1)
     public static List<String> merge(CSV input, List<Integer> mergeIndexes) {
         List<CSVRecord> rows = input.getRecords();
         List<CSVRecord> mergeRows = mergeIndexes.stream().map(rows::get).collect(Collectors.toList());
-
-        rows.removeAll(mergeRows);
 
         if (mergeRows.size() == 1) return new ArrayList<>(mergeRows.get(0).toList());
 
