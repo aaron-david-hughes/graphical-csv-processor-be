@@ -8,6 +8,8 @@ build_test_image:
   image: docker:19.03.1
   stage: test_image
   tags: [dind]
+  variables:
+    DOCKER_HOST: tcp://dockerdaemon:2376
   services:
     - name: docker:19.03.1-dind
       alias: dockerdaemon
