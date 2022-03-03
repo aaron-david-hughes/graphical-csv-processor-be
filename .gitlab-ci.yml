@@ -1,7 +1,19 @@
 image: maven:3.8.4-jdk-11-slim
 
 stages:
+  - test_image
   - unit_test
+
+build_test_image:
+  image: docker:19.03.1
+  tags: [dind]
+  services:
+    - name: docker:19.03.1-dind
+      alias: dockerdaemon
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER docker.io --password-stdin
+    - docker build -t $CI_REGISTRY:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY
 
 unit_tests:
   stage: unit_test
