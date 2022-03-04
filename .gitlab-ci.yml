@@ -28,7 +28,7 @@ integration_tests:
   stage: acceptance
   tags: [dind]
   image:
-    name: postman/newman
+    name: qub40232046/newman
     entrypoint: [ "" ]
   services:
     - name: $CI_REGISTRY
