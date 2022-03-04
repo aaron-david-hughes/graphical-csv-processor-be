@@ -35,7 +35,7 @@ integration_tests:
       alias: graphical-csv-processing-api
   script:
     - cd /builds/40232046/graphical-csv-processing-be/integration
-    - newman run collection.json --env-var "baseUrl=graphical-csv-processing-api:8080"
+    - newman run collection.json --env-var "base_url=graphical-csv-processing-api:8080"
 
 # will execute integration tests here also
 # tried and failed with docker multi arch builds => not necessary can be a future improvement
