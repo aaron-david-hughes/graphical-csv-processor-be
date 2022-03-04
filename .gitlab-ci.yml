@@ -1,28 +1,40 @@
 image: maven:3.8.4-jdk-11-slim
 
 stages:
-  - test_image
-  - unit_test
+#  - test_image_and_unit_tests
+  - acceptance
 
-build_test_image:
-  image: docker:19.03.1
-  stage: test_image
+#build_test_image:
+#  image: docker:19.03.1
+#  stage: test_image_and_unit_tests
+#  tags: [dind]
+#  variables:
+##    DOCKER_HOST: tcp://dockerdaemon:2376 this is not currently the host due to cert issues - it is tcp://docker:2376
+#    DOCKER_TLS_CERTDIR: "/certs"
+#  services:
+#    - docker:19.03.1-dind
+#  script:
+#    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER docker.io --password-stdin
+#    - docker build -t $CI_REGISTRY:$CI_COMMIT_SHORT_SHA .
+#    - docker push $CI_REGISTRY
+#
+#unit_tests:
+#  stage: test_image_and_unit_tests
+#  tags: [backend]
+#  script:
+#    - mvn test
+
+integration_tests:
+  stage: acceptance
   tags: [dind]
-  variables:
-#    DOCKER_HOST: tcp://dockerdaemon:2376 this is not currently the host due to cert issues - it is tcp://docker:2376
-    DOCKER_TLS_CERTDIR: "/certs"
+  image:
+    name: postman/newman
+    entrypoint: [ "" ]
   services:
-    - docker:19.03.1-dind
+    - name: $CI_REGISTRY
+      alias: graphical-csv-processing-api
   script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER docker.io --password-stdin
-    - docker build -t $CI_REGISTRY:$CI_COMMIT_SHORT_SHA .
-    - docker push $CI_REGISTRY
-
-unit_tests:
-  stage: unit_test
-  tags: [backend]
-  script:
-    - mvn test
+    - newman run integration/collection.json --env-var "baseUrl=graphical-csv-processing-api:8080"
 
 # will execute integration tests here also
 # tried and failed with docker multi arch builds => not necessary can be a future improvement

@@ -1,0 +1,86 @@
+{
+	"info": {
+		"_postman_id": "31326bf5-c21f-4267-a34a-34a9e819b9e1",
+		"name": "Graphical CSV Processing BE Integration Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should return 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Should contain originally validated response\", () => {",
+							"    pm.expect(pm.response.responseSize).to.be.equal(187);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "graph",
+							"value": "{\n\t\"defaultValues\": {},\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"filter\",\n      \t\t\t\"filterType\": \"less_than\",\n      \t\t\t\"column\": \"Score\",\n     \t\t\t\"condition\": \"40\",\n\t\t\t\"equal\": \"true\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"1\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t}\n\t]\n}",
+							"type": "text"
+						},
+						{
+							"key": "csvFiles",
+							"type": "file",
+							"src": "Scores.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{base_url}}/process",
+					"protocol": "http",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"process"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "localhost:8080",
+			"type": "string"
+		}
+	]
+}
