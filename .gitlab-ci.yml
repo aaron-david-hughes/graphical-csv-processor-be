@@ -34,7 +34,7 @@ integration_tests:
     - name: $CI_REGISTRY
       alias: graphical-csv-processing-api
   script:
-    - cd /builds/40232046/graphical-csv-processing-be/integrations
+    - cd /builds/40232046/graphical-csv-processing-be/integration
     - newman run collection.json --env-var "baseUrl=graphical-csv-processing-api:8080"
 
 # will execute integration tests here also
