@@ -12,8 +12,6 @@ public class AliasProcessingNode extends UnaryOperationNode {
 
     protected String alias;
 
-    //will throw error if column name clashes now => this will be on the user to handle prior to using
-
     public AliasProcessingNode(String id, String group, String operation, String alias) {
         super(id, group, operation);
         this.alias = alias;
