@@ -6,54 +6,648 @@
 	},
 	"item": [
 		{
-			"name": "Filter",
-			"event": [
+			"name": "Join",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Should return 200\", () => {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Should contain originally validated response\", () => {",
-							"    pm.expect(pm.response.responseSize).to.be.equal(187);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
+					"name": "Inner Join",
+					"event": [
 						{
-							"key": "graph",
-							"value": "{\n\t\"defaultValues\": {},\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"filter\",\n      \t\t\t\"filterType\": \"less_than\",\n      \t\t\t\"column\": \"Score\",\n     \t\t\t\"condition\": \"40\",\n\t\t\t\"equal\": \"true\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"1\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t}\n\t]\n}",
-							"type": "text"
-						},
-						{
-							"key": "csvFiles",
-							"type": "file",
-							"src": "Scores.csv"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(352);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,177,142,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,101,145,65,10,2,49,12,69,247,158,194,3,252,69,166,118,146,184,244,2,34,120,2,209,89,58,130,212,251,91,76,19,91,165,48,255,195,188,252,52,233,185,188,110,203,90,142,175,59,206,215,199,115,193,161,148,101,189,93,214,130,211,243,114,221,78,38,201,100,103,146,77,102,19,54,17,19,53,217,183,114,218,100,74,187,68,153,161,19,194,83,61,83,59,205,57,168,16,69,120,234,17,115,13,156,9,57,33,188,255,166,111,182,131,149,98,132,167,192,34,217,193,12,206,8,239,121,211,63,200,224,72,228,177,169,21,57,168,152,247,8,79,67,230,231,34,13,100,130,16,194,247,83,183,175,131,9,44,8,223,167,209,208,186,78,18,119,172,126,156,186,223,99,165,52,18,249,103,221,3,168,208,25,225,99,132,239,226,27,88,39,17,79,148,190,49,253,36,74,125,25,127,107,73,93,98,20,56,152,161,190,30,201,67,98,203,125,3,80,75,7,8,220,140,34,61,218,0,0,0,200,2,0,0,80,75,1,2,20,0,20,0,8,8,8,0,177,142,101,84,220,140,34,61,218,0,0,0,200,2,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,18,1,0,0,0,0];",
+									"",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
-				},
-				"url": {
-					"raw": "http://{{base_url}}/process",
-					"protocol": "http",
-					"host": [
-						"{{base_url}}"
 					],
-					"path": [
-						"process"
-					]
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n                {\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Attendance.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"join\",\n      \t\t\t\"joinType\": \"inner\",\n      \t\t\t\"onLeft\": \"StudentNum\",\n     \t\t\t\"onRight\": \"Attendant\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"3\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"2\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t},\n                {\n                       \"from\": \"2\",\n\t\t\t\"to\": \"3\"\n                }\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": [
+										"Attendance.csv",
+										"Scores.csv"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Outer Join",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(511);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,144,149,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,109,84,75,110,3,33,12,221,247,20,61,192,91,120,248,216,176,236,5,170,74,57,65,213,100,217,84,138,166,247,47,13,216,3,12,25,41,182,252,30,15,127,128,203,254,123,189,221,247,247,223,111,92,190,126,30,55,188,237,251,237,126,253,188,239,248,120,124,126,189,110,213,184,106,124,53,161,154,88,13,87,35,213,164,106,114,91,78,47,129,156,119,20,24,105,131,249,84,190,173,125,205,83,98,130,36,152,79,61,165,122,141,24,9,193,193,124,133,233,208,86,98,97,49,204,39,163,153,178,18,3,56,192,124,213,219,206,68,6,155,34,143,155,214,69,74,76,136,25,230,211,160,249,76,164,17,153,32,4,243,251,170,219,191,18,29,88,96,126,175,70,195,214,165,18,203,177,248,99,213,125,31,11,43,153,34,79,237,30,136,9,41,194,124,43,225,104,124,35,150,74,68,21,165,223,152,38,69,41,147,209,89,139,235,20,109,129,18,3,146,182,71,194,160,72,163,34,195,69,28,63,13,39,148,140,79,225,162,25,183,69,216,161,232,156,195,1,46,47,194,252,127,106,206,225,178,229,130,157,9,126,145,73,118,136,139,188,115,169,123,197,46,85,174,194,9,254,188,229,70,207,139,114,14,59,228,85,56,64,252,34,204,24,164,161,87,84,166,177,213,105,24,156,251,105,218,57,81,56,246,39,247,184,19,6,251,110,200,199,113,52,56,14,39,181,17,15,88,6,128,102,241,220,65,70,49,152,59,201,197,106,246,139,155,210,193,113,122,140,38,113,153,154,50,173,206,231,219,218,193,50,166,165,15,132,193,126,124,180,166,174,73,156,242,126,126,127,80,75,7,8,127,150,93,178,121,1,0,0,8,6,0,0,80,75,1,2,20,0,20,0,8,8,8,0,144,149,101,84,127,150,93,178,121,1,0,0,8,6,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,177,1,0,0,0,0];",
+									"",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n                {\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Attendance.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"join\",\n      \t\t\t\"joinType\": \"outer\",\n      \t\t\t\"onLeft\": \"StudentNum\",\n     \t\t\t\"onRight\": \"Attendant\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"3\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"2\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t},\n                {\n                       \"from\": \"2\",\n\t\t\t\"to\": \"3\"\n                }\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": [
+										"Attendance.csv",
+										"Scores.csv"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Left Join",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(425);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,253,149,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,109,83,65,110,195,32,16,188,247,21,125,192,28,214,24,22,56,246,3,85,164,188,32,74,124,172,43,69,206,255,187,13,236,6,2,70,242,140,198,195,236,46,182,207,199,227,182,237,199,247,227,7,231,235,239,125,195,215,113,108,251,237,178,31,56,221,47,215,207,165,128,43,176,22,240,5,66,1,46,16,11,164,2,185,110,167,15,79,110,117,228,25,105,129,113,146,181,212,85,153,26,19,98,130,113,106,45,133,85,99,32,120,7,227,250,152,94,217,106,20,23,195,56,153,205,146,213,232,193,30,198,53,111,25,141,12,182,68,238,139,150,77,106,76,8,25,198,169,203,124,54,82,141,76,136,4,227,237,212,245,174,70,7,142,48,222,166,81,87,90,38,177,30,133,247,83,183,231,40,174,100,137,252,118,220,157,49,33,5,24,183,17,94,7,95,141,50,73,212,196,216,22,166,183,196,40,111,70,223,117,116,77,162,109,80,163,71,210,227,137,190,75,164,62,145,225,2,94,151,202,9,210,241,32,75,102,88,38,178,131,228,140,178,135,203,19,153,255,191,154,81,150,146,19,119,38,172,147,78,178,67,152,244,157,101,238,153,91,166,156,201,9,235,88,114,161,231,143,50,202,14,121,38,123,196,117,34,51,218,232,63,80,75,7,8,142,3,88,57,35,1,0,0,55,4,0,0,80,75,1,2,20,0,20,0,8,8,8,0,253,149,101,84,142,3,88,57,35,1,0,0,55,4,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,91,1,0,0,0,0];",
+									"",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n                {\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Attendance.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"join\",\n      \t\t\t\"joinType\": \"left\",\n      \t\t\t\"onLeft\": \"StudentNum\",\n     \t\t\t\"onRight\": \"Attendant\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"3\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"2\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t},\n                {\n                       \"from\": \"2\",\n\t\t\t\"to\": \"3\"\n                }\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": [
+										"Attendance.csv",
+										"Scores.csv"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Right Join",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(431);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,42,150,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,109,83,65,110,196,48,8,188,247,21,125,128,15,216,193,224,28,251,129,170,210,190,96,181,155,99,83,105,149,253,127,93,217,16,160,43,43,193,210,12,227,1,227,143,227,216,246,251,117,63,210,215,227,122,123,207,35,148,17,150,17,112,132,58,2,141,192,35,180,17,214,153,14,233,114,60,239,219,126,124,62,191,211,229,246,243,216,222,16,202,82,0,41,65,95,121,46,217,41,216,178,16,89,9,48,83,254,190,36,112,155,185,94,75,65,110,66,92,103,62,56,53,209,169,160,217,96,156,41,136,69,136,66,202,230,96,163,83,156,85,33,41,136,36,196,69,137,214,184,234,96,202,14,118,58,152,8,133,88,141,194,153,162,58,20,42,26,4,5,73,253,176,35,64,172,235,236,179,45,91,193,186,10,113,53,26,167,150,232,144,239,139,252,21,100,16,162,173,230,191,31,42,206,11,184,186,58,72,44,196,37,140,71,246,126,48,220,151,157,159,14,106,127,168,134,225,8,117,209,139,99,84,167,207,179,250,225,48,133,193,79,51,221,61,143,81,176,85,33,174,47,108,159,58,28,31,140,245,211,65,22,63,236,123,44,84,213,41,225,249,217,123,239,32,202,251,226,37,140,170,159,103,198,48,20,206,15,166,38,247,206,53,180,113,172,244,11,80,75,7,8,1,242,255,136,41,1,0,0,153,4,0,0,80,75,1,2,20,0,20,0,8,8,8,0,42,150,101,84,1,242,255,136,41,1,0,0,153,4,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,97,1,0,0,0,0];",
+									"    ",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n                {\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Attendance.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"join\",\n      \t\t\t\"joinType\": \"right\",\n      \t\t\t\"onLeft\": \"StudentNum\",\n     \t\t\t\"onRight\": \"Attendant\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"3\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"2\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t},\n                {\n                       \"from\": \"2\",\n\t\t\t\"to\": \"3\"\n                }\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": [
+										"Attendance.csv",
+										"Scores.csv"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Filter",
+			"item": [
+				{
+					"name": "String Equality Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(169);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,156,152,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,11,46,41,77,73,205,43,241,43,205,213,9,78,206,47,74,229,50,49,48,50,54,50,48,53,208,49,49,130,176,13,13,64,108,0,80,75,7,8,24,114,159,144,35,0,0,0,40,0,0,0,80,75,1,2,20,0,20,0,8,8,8,0,156,152,101,84,24,114,159,144,35,0,0,0,40,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,91,0,0,0,0,0];",
+									"",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"filter\",\n      \t\t\t\"filterType\": \"string_equality\",\n      \t\t\t\"column\": \"Score\",\n     \t\t\t\"condition\": \"42\",\n\t\t\t\"equal\": \"true\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"1\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t}\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": "Scores.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Numeric Equality Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(169);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,15,153,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,11,46,41,77,73,205,43,241,43,205,213,9,78,206,47,74,229,50,49,48,50,54,50,48,53,208,49,49,130,176,13,13,64,108,0,80,75,7,8,24,114,159,144,35,0,0,0,40,0,0,0,80,75,1,2,20,0,20,0,8,8,8,0,15,153,101,84,24,114,159,144,35,0,0,0,40,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,91,0,0,0,0,0];",
+									"",
+									"    console.log(JSON.stringify(pm.response.stream))",
+									"",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"filter\",\n      \t\t\t\"filterType\": \"numeric_equality\",\n      \t\t\t\"column\": \"Score\",\n     \t\t\t\"condition\": \"42\",\n\t\t\t\"equal\": \"true\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"1\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t}\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": "Scores.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Less Than Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(193);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,206,96,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,11,46,41,77,73,205,43,241,43,205,213,9,78,206,47,74,229,50,49,48,50,54,50,48,55,211,49,50,133,178,45,76,116,140,44,161,108,75,3,29,99,11,24,27,168,6,206,182,208,49,134,170,49,52,48,211,177,4,0,80,75,7,8,235,87,240,103,59,0,0,0,87,0,0,0,80,75,1,2,20,0,20,0,8,8,8,0,206,96,101,84,235,87,240,103,59,0,0,0,87,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,115,0,0,0,0,0];",
+									"",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"filter\",\n      \t\t\t\"filterType\": \"less_than\",\n      \t\t\t\"column\": \"Score\",\n     \t\t\t\"condition\": \"42\",\n\t\t\t\"equal\": \"true\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"1\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t}\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": "Scores.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Less Than Or Equal Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(204);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,52,151,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,11,46,41,77,73,205,43,241,43,205,213,9,78,206,47,74,229,50,49,48,50,54,50,48,53,208,49,49,130,178,205,205,116,140,76,161,108,11,19,29,35,75,40,219,210,64,199,216,2,198,6,170,129,179,45,116,140,161,106,12,13,16,230,24,26,152,233,88,2,0,80,75,7,8,97,207,63,100,70,0,0,0,111,0,0,0,80,75,1,2,20,0,20,0,8,8,8,0,52,151,101,84,97,207,63,100,70,0,0,0,111,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,126,0,0,0,0,0];",
+									"    ",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"filter\",\n      \t\t\t\"filterType\": \"less_than_or_equal\",\n      \t\t\t\"column\": \"Score\",\n     \t\t\t\"condition\": \"42\",\n\t\t\t\"equal\": \"true\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"1\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t}\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": "Scores.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Greater Than Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(258);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,119,151,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,69,142,49,18,194,64,12,3,123,222,162,194,113,124,182,238,19,52,121,2,164,4,102,152,228,255,92,113,34,221,206,142,45,105,59,206,231,254,62,238,231,11,219,227,243,221,111,97,190,186,69,130,139,152,40,78,110,142,72,113,32,67,156,200,191,39,90,159,156,134,50,177,35,75,28,215,125,142,174,191,39,216,38,215,248,149,175,209,171,13,21,160,50,139,72,121,26,154,54,211,81,202,103,94,59,57,238,181,173,59,154,186,250,200,156,57,139,57,186,139,3,181,254,0,80,75,7,8,146,70,201,64,124,0,0,0,36,1,0,0,80,75,1,2,20,0,20,0,8,8,8,0,119,151,101,84,146,70,201,64,124,0,0,0,36,1,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,180,0,0,0,0,0];",
+									"    ",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"filter\",\n      \t\t\t\"filterType\": \"greater_than\",\n      \t\t\t\"column\": \"Score\",\n     \t\t\t\"condition\": \"42\",\n\t\t\t\"equal\": \"true\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"1\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t}\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": "Scores.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Greater Than Or Equal Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Should contain originally validated response\", () => {",
+									"    pm.expect(pm.response.responseSize).to.be.equal(264);",
+									"});",
+									"",
+									"pm.test(\"Should match expected payload\", () => {",
+									"    let data = [80,75,3,4,20,0,8,8,8,0,44,152,101,84,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,79,117,116,112,117,116,46,99,115,118,69,143,49,14,195,48,12,3,247,190,133,131,172,200,146,252,137,46,121,66,147,177,45,80,36,255,175,7,211,222,14,4,69,82,251,117,31,231,231,122,222,111,236,175,239,239,124,152,232,166,98,142,44,228,68,228,224,42,48,37,43,204,201,6,55,178,195,167,158,168,109,176,11,66,200,10,15,178,45,191,247,222,169,39,178,14,142,126,75,61,122,47,247,132,33,153,25,9,167,158,130,202,253,169,8,230,167,175,157,217,253,220,214,20,149,93,173,103,142,156,34,235,223,34,138,54,217,16,219,31,80,75,7,8,71,36,247,177,130,0,0,0,60,1,0,0,80,75,1,2,20,0,20,0,8,8,8,0,44,152,101,84,71,36,247,177,130,0,0,0,60,1,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,117,116,112,117,116,46,99,115,118,80,75,5,6,0,0,0,0,1,0,1,0,56,0,0,0,186,0,0,0,0,0];",
+									"    ",
+									"    utils.payloadValidation(data, pm.response.stream);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Respobs",
+								"value": "blob",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "graph",
+									"value": "{\n\t\"nodes\": [\n\t\t{\n\t\t\t\"id\": \"0\",\n      \t\t\t\"group\": \"file\", \n     \t\t\t\"operation\":\"open_file\",\n      \t\t\t\"name\": \"Scores.csv\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"1\",\n      \t\t\t\"group\": \"processing\", \n      \t\t\t\"operation\": \"filter\",\n      \t\t\t\"filterType\": \"greater_than_or_equal\",\n      \t\t\t\"column\": \"Score\",\n     \t\t\t\"condition\": \"42\",\n\t\t\t\"equal\": \"true\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"2\",\n\t\t\t\"group\": \"file\", \n     \t\t\t\"operation\": \"write_file\",\n      \t\t\t\"name\": \"Output.csv\"\n\t\t}\n\t],\n\t\"edges\": [\n\t\t{\n\t\t\t\"from\": \"0\",\n\t\t\t\"to\": \"1\"\n\t\t},\n\t\t{\n\t\t\t\"from\": \"1\",\n\t\t\t\"to\": \"2\"\n\t\t}\n\t]\n}",
+									"type": "text"
+								},
+								{
+									"key": "csvFiles",
+									"type": "file",
+									"src": "Scores.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{base_url}}/process",
+							"protocol": "http",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"process"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -62,7 +656,44 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					""
+					"function payloadValidation(expectedData, actualData) {",
+					"    let datetime = [",
+					"        actualData[10],",
+					"        actualData[11],",
+					"        actualData[12],",
+					"        actualData[13]",
+					"    ];",
+					"",
+					"    for (let i = 0; i < actualData.length; i++) {",
+					"        if (actualData[i] === expectedData[i]) continue;",
+					"",
+					"        if (i >= 10 && i <= 13) continue; //datetime difference",
+					"",
+					"        if (i < 3) pm.expect.fail('zip stream content is not as expected at index: ' + i);",
+					"        else {",
+					"            let diffContents = [",
+					"                actualData[i - 3],",
+					"                actualData[i - 2],",
+					"                actualData[i - 1],",
+					"                actualData[i],",
+					"                actualData[i + 1],",
+					"                actualData[i + 2],",
+					"                actualData[i + 3]",
+					"            ];",
+					"",
+					"            //check if subfile datetime difference by comparing to overall time stamp",
+					"            if (!hasSubArray(diffContents, datetime)) pm.expect.fail('zip stream content is not as expected at index: ' + i);",
+					"        }",
+					"    }",
+					"}",
+					"",
+					"function hasSubArray(master, sub) {",
+					"    return sub.every((i => v => i = master.indexOf(v, i) + 1)(0));",
+					"}",
+					"",
+					"utils = {",
+					"    payloadValidation: payloadValidation",
+					"}"
 				]
 			}
 		},

@@ -1,28 +1,28 @@
 image: maven:3.8.4-jdk-11-slim
 
 stages:
-#  - test_image_and_unit_tests
+  - test_image_and_unit_tests
   - acceptance
+  - update_image
 
-#build_test_image:
-#  image: docker:19.03.1
-#  stage: test_image_and_unit_tests
-#  tags: [dind]
-#  variables:
-##    DOCKER_HOST: tcp://dockerdaemon:2376 this is not currently the host due to cert issues - it is tcp://docker:2376
-#    DOCKER_TLS_CERTDIR: "/certs"
-#  services:
-#    - docker:19.03.1-dind
-#  script:
-#    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER docker.io --password-stdin
-#    - docker build -t $CI_REGISTRY:$CI_COMMIT_SHORT_SHA .
-#    - docker push $CI_REGISTRY
-#
-#unit_tests:
-#  stage: test_image_and_unit_tests
-#  tags: [backend]
-#  script:
-#    - mvn test
+build_test_image:
+  image: docker:19.03.1
+  stage: test_image_and_unit_tests
+  tags: [dind]
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  services:
+    - docker:19.03.1-dind
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER docker.io --password-stdin
+    - docker build -t $CI_REGISTRY:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY:$CI_COMMIT_SHORT_SHA
+
+unit_tests:
+  stage: test_image_and_unit_tests
+  tags: [backend]
+  script:
+    - mvn test
 
 integration_tests:
   stage: acceptance
@@ -31,11 +31,23 @@ integration_tests:
     name: qub40232046/newman
     entrypoint: [ "" ]
   services:
-    - name: $CI_REGISTRY
+    - name: $CI_REGISTRY:$CI_COMMIT_SHORT_SHA
       alias: graphical-csv-processing-api
   script:
     - cd /builds/40232046/graphical-csv-processing-be/integration
     - newman run collection.json --env-var "base_url=graphical-csv-processing-api:8080"
 
-# will execute integration tests here also
-# tried and failed with docker multi arch builds => not necessary can be a future improvement
+retag_image:
+  stage: update_image
+  tags: [ dind ]
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  services:
+    - docker:19.03.1-dind
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER docker.io --password-stdin
+    - docker pull $CI_REGISTRY:$CI_COMMIT_SHORT_SHA
+    - docker tag $CI_REGISTRY:$CI_COMMIT_SHORT_SHA $CI_REGISTRY
+    - docker push $CI_REGISTRY
+  only:
+    - master
