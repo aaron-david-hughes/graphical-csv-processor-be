@@ -15,7 +15,8 @@ build_test_image:
     - docker:19.03.1-dind
   script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER docker.io --password-stdin
-    - docker buildx create --use
+    - docker context create buildx-builder
+    - docker buildx create buildx-builder
     - docker buildx build --push --platform linux/arm64,linux/amd64 --tag $CI_REGISTRY:$CI_COMMIT_SHORT_SHA .
 
 unit_tests:
