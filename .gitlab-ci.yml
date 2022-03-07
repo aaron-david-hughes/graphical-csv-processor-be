@@ -8,16 +8,15 @@ stages:
 build_test_image:
   stage: create_image_and_unit_test
   tags: [dind]
-  image: qub40232046/docker-buildx:19.03.1
+  image: docker:19.03.1
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   services:
     - docker:19.03.1-dind
   script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER docker.io --password-stdin
-    - docker context create buildx-builder
-    - docker buildx create buildx-builder
-    - docker buildx build --push --platform linux/arm64,linux/amd64 --tag $CI_REGISTRY:$CI_COMMIT_SHORT_SHA .
+    - docker build -t $CI_REGISTRY:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY:$CI_COMMIT_SHORT_SHA
 
 unit_tests:
   stage: create_image_and_unit_test
