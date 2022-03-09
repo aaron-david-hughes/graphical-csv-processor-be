@@ -23,10 +23,10 @@ public class SetProcessorTest {
     }
 
     @Test
-    public void shouldGiveGenuineComplimentWhenSubsetIsAProperSubset() {
+    public void shouldGiveGenuineComplementWhenSubsetIsAProperSubset() {
         CSV set = csvs.get("Scores.csv");
         CSV subset = csvs.get("ScoresSubset.csv");
-        CSV output = SetProcessor.getCompliment(set, subset, "StudentNum");
+        CSV output = SetProcessor.getComplement(set, subset, "StudentNum");
 
         assertEquals(set.getRecords().size() - subset.getRecords().size(), output.getRecords().size());
 
@@ -45,7 +45,7 @@ public class SetProcessorTest {
     public void shouldGiveEmptyCsvWhenSubsetIsSet() {
         CSV set = csvs.get("Scores.csv");
         CSV subset = csvs.get("Scores.csv");
-        CSV output = SetProcessor.getCompliment(set, subset, "StudentNum");
+        CSV output = SetProcessor.getComplement(set, subset, "StudentNum");
 
         assertEquals(0, output.getRecords().size());
     }
@@ -59,7 +59,7 @@ public class SetProcessorTest {
         for (CSV[] testSet : testSets) {
             CSV set = testSet[0];
             CSV subset = testSet[1];
-            CSV output = SetProcessor.getCompliment(set, subset, "StudentNum");
+            CSV output = SetProcessor.getComplement(set, subset, "StudentNum");
 
             assertEquals(testSet[0], output);
         }
@@ -68,10 +68,10 @@ public class SetProcessorTest {
     @Test
     public void shouldThrowIllegalArgumentExceptionWhenTwoSetsAreNotComparable() {
         try {
-            SetProcessor.getCompliment(csvs.get("Scores.csv"), csvs.get("Alphabetical.csv"), "StudentNum");
+            SetProcessor.getComplement(csvs.get("Scores.csv"), csvs.get("Alphabetical.csv"), "StudentNum");
             fail("Expected an illegal argument exception to be thrown");
         } catch (IllegalArgumentException e) {
-            assertEquals("Compliment must be ran on CSVs with the same headers", e.getMessage());
+            assertEquals("Complement must be ran on CSVs with the same headers", e.getMessage());
         }
     }
 

@@ -8,11 +8,10 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOperat
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.ConcatTablesProcessingNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.JoinProcessingNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.OrProcessingNode;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.SetComplimentProcessingNode;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.SetComplementProcessingNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.unaryOperations.*;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -248,14 +247,14 @@ public class NodeDeserializerTest {
     }
 
     @Test
-    public void deserializesSetComplimentNode() throws JsonProcessingException {
+    public void deserializesSetComplementNode() throws JsonProcessingException {
         Map<String, String> m = new HashMap<>();
         m.put("keyHeader", "col");
 
-        Node n = objectMapper.readValue(generateJson("set_compliment", m), Node.class);
+        Node n = objectMapper.readValue(generateJson("set_complement", m), Node.class);
 
         assertNotNull(n);
-        assertEquals(SetComplimentProcessingNode.class, n.getClass());
+        assertEquals(SetComplementProcessingNode.class, n.getClass());
     }
 
     @Test

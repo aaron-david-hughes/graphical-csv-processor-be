@@ -2,7 +2,6 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processin
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.JoinProcessor;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.SetProcessor;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 import org.junit.Test;
@@ -20,7 +19,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SetComplimentProcessingNodeTest {
+public class SetComplementProcessingNodeTest {
 
     @Mock
     List<CSV> csvData;
@@ -34,10 +33,10 @@ public class SetComplimentProcessingNodeTest {
     @Mock
     CSV input2;
 
-    SetComplimentProcessingNode node = new SetComplimentProcessingNode(
+    SetComplementProcessingNode node = new SetComplementProcessingNode(
             "testId",
             "processing",
-            "set_compliment",
+            "set_complement",
             "testCol"
     );
 
@@ -76,7 +75,7 @@ public class SetComplimentProcessingNodeTest {
     }
 
     @Test
-    public void shouldReturnResultOfSetComplimentProcessingIfCorrectNumberOfDataElementsIsCorrect() {
+    public void shouldReturnResultOfSetComplementProcessingIfCorrectNumberOfDataElementsIsCorrect() {
         when(csvData.size()).thenReturn(2);
         when(csvData.get(0)).thenReturn(input1);
         when(csvData.get(1)).thenReturn(input2);
@@ -90,7 +89,7 @@ public class SetComplimentProcessingNodeTest {
                     .thenReturn(new CorrespondingCSV("deducedTestLeft", input2));
 
             setProcessorMockedStatic
-                    .when(() -> SetProcessor.getCompliment(input2, input1, "deducedTestLeft"))
+                    .when(() -> SetProcessor.getComplement(input2, input1, "deducedTestLeft"))
                     .thenReturn(csv);
 
             CSV result = node.process(csvData);

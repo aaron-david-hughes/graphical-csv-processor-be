@@ -10,11 +10,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class SetComplimentProcessingNode extends BinaryOperationNode {
+public class SetComplementProcessingNode extends BinaryOperationNode {
 
     protected String keyHeader;
 
-    public SetComplimentProcessingNode(String id, String group, String operation, String keyHeader) {
+    public SetComplementProcessingNode(String id, String group, String operation, String keyHeader) {
         super(id, group, operation);
         this.keyHeader = keyHeader;
     }
@@ -27,6 +27,6 @@ public class SetComplimentProcessingNode extends BinaryOperationNode {
 
         CorrespondingCSV csv = ColumnNameService.deduceColumnName(keyHeader, Collections.singletonList(csvData.get(1)));
 
-        return SetProcessor.getCompliment(csvData.get(1), csvData.get(0), csv.getColumnName());
+        return SetProcessor.getComplement(csvData.get(1), csvData.get(0), csv.getColumnName());
     }
 }

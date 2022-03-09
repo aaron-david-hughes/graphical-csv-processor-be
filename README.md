@@ -132,7 +132,7 @@ Node Types
 *   [Or Node](#user-content-or-node)
 *   [Order Column Node](#user-content-order-column-node)
 *   [Rename Column Node](#user-content-rename-column-node)
-*   [Set Compliment Node](#user-content-set-compliment-node)
+*   [Set Complement Node](#user-content-set-complement-node)
 *   [Take Columns Node](#user-content-take-columns-node)
 *   [Unique Columns Node](#user-content-unique-column-node)
 *   [Write File Node](#user-content-write-file-node)
@@ -344,11 +344,11 @@ Node Types
 *   Column specified cannot be [identified](#user-content-identifying-columns)
 *   New column name is [invalid](#user-content-valid-columns-names)
 
-### _Set Compliment Node_
+### _Set Complement Node_
 
-**Description:** Returns the complimentary set of subset compared to super set using key header as indicator for which fields are present. Note bigger csv supplied assumed as super set. Worthy of note is that the assumption is the column specified is unique.  
+**Description:** Returns the complementary set of subset compared to super set using key header as indicator for which fields are present. Note bigger csv supplied assumed as super set. Worthy of note is that the assumption is the column specified is unique.  
 **Inputs:** 2 csv files.  
-**Outputs:** Complimentary set of the subset compared to the super set. If either set passed in is empty it will output the csv passed as the outer set.  
+**Outputs:** Complementary set of the subset compared to the super set. If either set passed in is empty it will output the csv passed as the outer set.  
 **Attributes:** 1
 
 *   String: key header

@@ -11,7 +11,7 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOperat
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOperations.WriteFileNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.ConcatTablesProcessingNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.OrProcessingNode;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.SetComplimentProcessingNode;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.SetComplementProcessingNode;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.unaryOperations.*;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.JoinProcessingNode;
 
@@ -49,7 +49,7 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         operationDeserialize.put(ORDER_COLUMN, NodeDeserializer::orderColumnDeserialize);
         operationDeserialize.put(RENAME_COLUMN, NodeDeserializer::renameDeserialize);
         operationDeserialize.put(ROW_MATH, NodeDeserializer::rowMathDeserialize);
-        operationDeserialize.put(SET_COMPLIMENT, NodeDeserializer::setComplimentDeserialize);
+        operationDeserialize.put(SET_COMPLEMENT, NodeDeserializer::setComplementDeserialize);
         operationDeserialize.put(TAKE_COLUMNS, NodeDeserializer::takeColumnDeserialize);
         operationDeserialize.put(UNIQUE_COLUMN, NodeDeserializer::uniqueColumnDeserialize);
         operationDeserialize.put(WRITE_FILE, NodeDeserializer::writeFileDeserialize);
@@ -217,11 +217,11 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         return new DropAliasProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2]);
     }
 
-    private static SetComplimentProcessingNode setComplimentDeserialize(JsonNode jsonContents) {
+    private static SetComplementProcessingNode setComplementDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
         String[] attributes = getSpecificAttributes(jsonContents, KEY_HEADER);
 
-        return new SetComplimentProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0]);
+        return new SetComplementProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0]);
     }
 
     private static ConcatColumnsProcessingNode concatColumnsDeserialize(JsonNode jsonContents) {

@@ -11,9 +11,9 @@ public class SetProcessor implements Processor {
 
     private SetProcessor() {}
 
-    private static final String HEADER_ERROR_MSG = "Compliment must be ran on CSVs with the same headers";
+    private static final String HEADER_ERROR_MSG = "Complement must be ran on CSVs with the same headers";
 
-    public static CSV getCompliment(CSV set, CSV subset, String keyHeader) {
+    public static CSV getComplement(CSV set, CSV subset, String keyHeader) {
         if (!isComparableSet(set, subset)) throw new IllegalArgumentException(HEADER_ERROR_MSG);
 
         List<CSVRecord> records = set.getRecords();
@@ -28,11 +28,11 @@ public class SetProcessor implements Processor {
                 .map(csvRecord -> csvRecord.get(subsetHeaderIdx))
                 .collect(Collectors.toSet());
 
-        List<CSVRecord> complimentRecords = records.stream()
+        List<CSVRecord> complementRecords = records.stream()
                 .filter(csvRecord -> !presentInSubset.contains(csvRecord.get(setHeaderIdx)))
                 .collect(Collectors.toList());
 
-        return new CSV(set.getHeaders(), set.getHeaderMap(), complimentRecords);
+        return new CSV(set.getHeaders(), set.getHeaderMap(), complementRecords);
     }
 
     private static boolean isComparableSet(CSV set, CSV subset) {
