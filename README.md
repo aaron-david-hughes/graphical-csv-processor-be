@@ -76,8 +76,9 @@ curl --location --request POST 'http://localhost:8080/process' \
 *   Must ensure each file supplied has a corresponding Open File Node.
 *   Files must be .csv.
 *   Nodes supplied must be listed or be added.
-*   Nodes supplied must have the required attributes specified, or have a default supplied.
+*   Nodes supplied must have the required attributes specified.
 *   Edges must contain both 'from' and 'to' attributes referring to node ids.
+*   No cycles may be in the supplied graph, G = (N, E).
 
 ### _Valid Columns Names_
 
@@ -100,15 +101,6 @@ Genuine data is considered cells with non-empty string content.
 *   Genuine data in one cell and empty or null in other => merge
 *   Non-matching genuine data in cells => exception
 
-### _Supplying default values_
-As seen above, Default Values can be supplied. This will be done through key value pairs as json object.
-```json
-{
-  "column": "StudentNum"
-}
-```
-The above will enable defaulting column attributes of nodes to "StudentNum" if missing in node object.
-
 ### _How the data passes from node to node_
 Each node will output a single csv result. This is then able to be used as input into any number of  non-dependent nodes.  
 That is to emphasise **you cannot have loops in the supplied graph**
@@ -119,6 +111,7 @@ Node Types
 ----------
 
 *   [Alias Node](#user-content-alias-node)
+*   [Columns Math Node](#user-content-column-math-node)
 *   [Concat Columns Node](#user-content-concat-columns-node)
 *   [Concat Tables Node](#user-content-concat-tables-node)
 *   [Drop Alias Node](#user-content-drop-alias-node)
@@ -132,6 +125,8 @@ Node Types
 *   [Or Node](#user-content-or-node)
 *   [Order Column Node](#user-content-order-column-node)
 *   [Rename Column Node](#user-content-rename-column-node)
+*   [Row Basic Math Node](#user-content-row-basic-math-node)
+*   [Row Statistical Math Node](#user-content-row-statistical-math-node)
 *   [Set Complement Node](#user-content-set-complement-node)
 *   [Take Columns Node](#user-content-take-columns-node)
 *   [Unique Columns Node](#user-content-unique-column-node)
@@ -148,8 +143,28 @@ Node Types
 
 **Exceptions if:**
 
-*   Not 1 and only 1 inbound csv
 *   Resultant csv does not have unique column headers
+*   Alias supplied is not [valid](#user-content-valid-column-names)
+
+### _Column Math Node_
+
+**Description:** Calculate the count, min, max, average or sum of a specified column.  
+**Inputs:** 1 csv file (will remove existing alias on any of the columns if present).  
+**Outputs:** Csv with just the calculated value.  
+**Attributes:** 2
+
+*   String: column
+*   [StatisticalType](src/main/java/com/graphicalcsvprocessing/graphicalcsvprocessing/processors/StatisticalMathProcessor.java): math operation
+    *   Average
+    *   Count
+    *   Max
+    *   Min
+    *   Sum
+
+**Exceptions if:**
+
+*   Column cannot be [identified](#user-content-identifying-columns)
+*   Any non-empty cell in the column cannot be parsed to double
 
 ### _Concat Columns Node_
 
@@ -343,6 +358,51 @@ Node Types
 
 *   Column specified cannot be [identified](#user-content-identifying-columns)
 *   New column name is [invalid](#user-content-valid-columns-names)
+
+### _Row Basic Math Node_
+
+**Description:** Add, subtract, multiply, divide or modulo of either two columns or one column and a literal.  
+**Inputs:** 1 csv file.  
+**Outputs:** Copy of csv with an additional column suffixed which takes the value in column1 and applies the column or literal in value.  
+**Attributes:** 5
+
+*   String: column1
+*   String: value
+*   String: new name
+*   [MathOperation](src/main/java/com/graphicalcsvprocessing/graphicalcsvprocessing/processors/BasicMathProcessor.java): math operation
+    *   Add
+    *   Divide
+    *   Modulo
+    *   Multiply
+    *   Subtract
+*   boolean: literal
+
+**Exceptions if:**
+
+*   Any column1 or, if literal is true, value cannot be [identified](#user-content-identifying-columns)
+*   New name header is not [valid](#user-content-valid-columns-names)
+*   Any non-empty cell in the columns specified cannot be parsed to double
+
+### _Row Statistical Math Node_
+
+**Description:** Calculate the count, min, max, average or sum of a specified columns of a row.  
+**Inputs:** 1 csv file.  
+**Outputs:** Copy of csv with an additional column suffixed.  
+**Attributes:** 3
+
+*   Comma-separated-list: columns
+*   String: new name
+*   [StatisticalType](src/main/java/com/graphicalcsvprocessing/graphicalcsvprocessing/processors/StatisticalMathProcessor.java): math operation
+    *   Average
+    *   Count
+    *   Max
+    *   Min
+    *   Sum
+
+**Exceptions if:**
+
+*   Any column in columns cannot be [identified](#user-content-identifying-columns)
+*   Any non-empty cell in the columns specified cannot be parsed to double
 
 ### _Set Complement Node_
 

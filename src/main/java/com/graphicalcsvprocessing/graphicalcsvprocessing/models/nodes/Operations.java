@@ -16,7 +16,8 @@ public class Operations {
     public static final String OR = "or";
     public static final String ORDER_COLUMN = "order_column";
     public static final String RENAME_COLUMN = "rename_column";
-    public static final String ROW_MATH = "row_math";
+    public static final String ROW_BASIC_MATH = "row_basic_math";
+    public static final String ROW_STAT_MATH = "row_stat_math";
     public static final String SET_COMPLEMENT = "set_complement";
     public static final String TAKE_COLUMNS = "take_columns";
     public static final String UNIQUE_COLUMN = "unique_column";

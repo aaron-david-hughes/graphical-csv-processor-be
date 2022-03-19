@@ -2,13 +2,13 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processin
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MathProcessor;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.StatisticalMathProcessor;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 
 import java.io.IOException;
 import java.util.List;
 
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MathProcessor.StatisticalType;
+import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.StatisticalMathProcessor.StatisticalType;
 
 public class ColumnMathProcessingNode extends UnaryOperationNode {
 
@@ -27,6 +27,6 @@ public class ColumnMathProcessingNode extends UnaryOperationNode {
 
         CorrespondingCSV csv = ColumnNameService.deduceColumnName(column, csvData);
 
-        return MathProcessor.column(csv.getCsv(), mathOp, csv.getColumnName());
+        return StatisticalMathProcessor.column(csv.getCsv(), mathOp, csv.getColumnName());
     }
 }

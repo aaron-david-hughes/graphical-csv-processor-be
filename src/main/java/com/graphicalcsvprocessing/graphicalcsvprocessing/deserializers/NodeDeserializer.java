@@ -22,10 +22,11 @@ import java.util.function.Function;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Operations.*;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Attributes.*;
+import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.BasicMathProcessor.MathOperation;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.JoinProcessor.JoinType;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.FilterProcessor.FilterType;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.OrderColumnProcessor.OrderType;
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MathProcessor.StatisticalType;
+import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.StatisticalMathProcessor.StatisticalType;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MergeColumnsProcessor.MergeType;
 
 public class NodeDeserializer extends StdDeserializer<Node> {
@@ -48,7 +49,8 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         operationDeserialize.put(OR, NodeDeserializer::orDeserialize);
         operationDeserialize.put(ORDER_COLUMN, NodeDeserializer::orderColumnDeserialize);
         operationDeserialize.put(RENAME_COLUMN, NodeDeserializer::renameDeserialize);
-        operationDeserialize.put(ROW_MATH, NodeDeserializer::rowMathDeserialize);
+        operationDeserialize.put(ROW_BASIC_MATH, NodeDeserializer::rowBasicMathDeserialize);
+        operationDeserialize.put(ROW_STAT_MATH, NodeDeserializer::rowStatMathDeserialize);
         operationDeserialize.put(SET_COMPLEMENT, NodeDeserializer::setComplementDeserialize);
         operationDeserialize.put(TAKE_COLUMNS, NodeDeserializer::takeColumnDeserialize);
         operationDeserialize.put(UNIQUE_COLUMN, NodeDeserializer::uniqueColumnDeserialize);
@@ -231,13 +233,22 @@ public class NodeDeserializer extends StdDeserializer<Node> {
         return new ConcatColumnsProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], attributes[1], attributes[2]);
     }
 
-    private static RowMathProcessingNode rowMathDeserialize(JsonNode jsonContents) {
+    private static RowBasicMathProcessingNode rowBasicMathDeserialize(JsonNode jsonContents) {
+        String[] coreAttributes = getCoreAttributes(jsonContents);
+        String[] attributes = getSpecificAttributes(jsonContents, COLUMN_1, VALUE, NEW_NAME, MATH_OPERATION, LITERAL);
+        MathOperation mathOperation = MathOperation.valueOf(attributes[3].toUpperCase());
+        boolean literal = Boolean.parseBoolean(attributes[4]);
+
+        return new RowBasicMathProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], attributes[0], attributes[1], attributes[2], mathOperation, literal);
+    }
+
+    private static RowStatisticalMathProcessingNode rowStatMathDeserialize(JsonNode jsonContents) {
         String[] coreAttributes = getCoreAttributes(jsonContents);
         String[] attributes = getSpecificAttributes(jsonContents, COLUMNS, NEW_NAME, MATH_OPERATION);
         String[] columns = splitCommaSeparatedList(attributes[0]);
         StatisticalType mathOp = StatisticalType.valueOf(attributes[2].toUpperCase());
 
-        return new RowMathProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], columns, attributes[1], mathOp);
+        return new RowStatisticalMathProcessingNode(coreAttributes[0], coreAttributes[1], coreAttributes[2], columns, attributes[1], mathOp);
     }
 
     private static ColumnMathProcessingNode columnMathDeserialize(JsonNode jsonContents) {

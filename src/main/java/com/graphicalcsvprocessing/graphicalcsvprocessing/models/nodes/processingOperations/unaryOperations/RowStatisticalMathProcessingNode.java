@@ -1,21 +1,21 @@
 package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.unaryOperations;
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MathProcessor;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.StatisticalMathProcessor;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 
 import java.io.IOException;
 import java.util.List;
 
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MathProcessor.StatisticalType;
+import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.StatisticalMathProcessor.StatisticalType;
 
-public class RowMathProcessingNode extends UnaryOperationNode {
+public class RowStatisticalMathProcessingNode extends UnaryOperationNode {
 
     protected String[] columns;
     protected String newName;
     protected StatisticalType mathOp;
 
-    public RowMathProcessingNode(String id, String group, String operation, String[] columns, String newName, StatisticalType mathOp) {
+    public RowStatisticalMathProcessingNode(String id, String group, String operation, String[] columns, String newName, StatisticalType mathOp) {
         super(id, group, operation);
         this.columns = columns;
         this.newName = newName;
@@ -32,6 +32,6 @@ public class RowMathProcessingNode extends UnaryOperationNode {
             ColumnNameService.deduceColumnName(s, csvData);
         }
 
-        return MathProcessor.row(csvData.get(0), mathOp, ColumnNameService.validateColumnName(newName), columns);
+        return StatisticalMathProcessor.row(csvData.get(0), mathOp, ColumnNameService.validateColumnName(newName), columns);
     }
 }

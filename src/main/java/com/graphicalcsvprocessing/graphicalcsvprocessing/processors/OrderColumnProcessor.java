@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.parseDouble;
+
 public class OrderColumnProcessor implements Processor {
 
     private OrderColumnProcessor() {}
@@ -20,7 +22,6 @@ public class OrderColumnProcessor implements Processor {
         return new CSV(input.getHeaders(), input.getHeaderMap(), ordered);
     }
 
-    @SuppressWarnings("unused")
     public enum OrderType {
         ALPHABETICAL_ORDER_ASC((input, columnIdx) -> {
             List<CSVRecord> records = input.getRecords();
@@ -35,12 +36,12 @@ public class OrderColumnProcessor implements Processor {
         }),
         NUMERIC_ORDER_ASC((input, columnIdx) -> {
             List<CSVRecord> records = input.getRecords();
-            records.sort(Comparator.comparingDouble(csvRecord -> Double.parseDouble(csvRecord.get(columnIdx))));
+            records.sort(Comparator.comparingDouble(csvRecord -> parseDouble(csvRecord.get(columnIdx))));
             return records;
         }),
         NUMERIC_ORDER_DESC((input, columnIdx) -> {
             List<CSVRecord> records = input.getRecords();
-            records.sort(Comparator.comparingDouble(csvRecord -> Double.parseDouble(csvRecord.get(columnIdx))));
+            records.sort(Comparator.comparingDouble(csvRecord -> parseDouble(csvRecord.get(columnIdx))));
             Collections.reverse(records);
             return records;
         });

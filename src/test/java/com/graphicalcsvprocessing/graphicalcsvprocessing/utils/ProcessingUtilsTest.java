@@ -69,4 +69,27 @@ public class ProcessingUtilsTest {
 
         assertEquals("hello,world,hello world", s);
     }
+
+    @Test
+    public void parseDoubleShouldReturnZeroWhenStringArgIsNullOrEmpty() {
+        String[] strings = {null, ""};
+
+        for (String s : strings) {
+            assertEquals(0.0, ProcessingUtils.parseDouble(s), 0);
+        }
+    }
+
+    @Test
+    public void parseDoubleShouldReturnValidDoubleWhenStringIsParsableToDouble() {
+        assertEquals(3.142, ProcessingUtils.parseDouble("3.142"), 0);
+    }
+
+    @Test
+    public void parseDoubleShouldThrowNumberFormatExceptionWhenNonEmptyStringNotParsableToDouble() {
+        try {
+            ProcessingUtils.parseDouble("Hello World!");
+        } catch (Exception e) {
+            assertEquals(NumberFormatException.class, e.getClass());
+        }
+    }
 }

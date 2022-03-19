@@ -2,7 +2,7 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processin
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MathProcessor;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.StatisticalMathProcessor;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +34,7 @@ public class ColumnMathProcessingNodeTest {
             "processing",
             "column_math",
             "test",
-            MathProcessor.StatisticalType.COUNT
+            StatisticalMathProcessor.StatisticalType.COUNT
     );
 
     @Test
@@ -76,7 +76,7 @@ public class ColumnMathProcessingNodeTest {
         when(csvData.size()).thenReturn(1);
 
         try (
-                MockedStatic<MathProcessor> mathProcessorMockedStatic = Mockito.mockStatic(MathProcessor.class);
+                MockedStatic<StatisticalMathProcessor> mathProcessorMockedStatic = Mockito.mockStatic(StatisticalMathProcessor.class);
                 MockedStatic<ColumnNameService> columnNameServiceMockedStatic = Mockito.mockStatic(ColumnNameService.class)
         ) {
             columnNameServiceMockedStatic
@@ -84,7 +84,7 @@ public class ColumnMathProcessingNodeTest {
                     .thenReturn(new CorrespondingCSV("test.test", input));
 
             mathProcessorMockedStatic
-                    .when(() -> MathProcessor.column(input, MathProcessor.StatisticalType.COUNT, "test.test"))
+                    .when(() -> StatisticalMathProcessor.column(input, StatisticalMathProcessor.StatisticalType.COUNT, "test.test"))
                     .thenReturn(csv);
 
             CSV result = node.process(csvData);

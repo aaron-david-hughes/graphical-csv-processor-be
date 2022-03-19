@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
 
+import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.parseDouble;
+
 public class FilterProcessor implements Processor {
 
     private FilterProcessor() {}
@@ -35,8 +37,8 @@ public class FilterProcessor implements Processor {
         STRING_EQUALITY(String::equals),
         NUMERIC_EQUALITY((c, v) -> {
             try {
-                double cDbl = Double.parseDouble(c);
-                double vDbl = Double.parseDouble(v);
+                double cDbl = parseDouble(c);
+                double vDbl = parseDouble(v);
 
                 return cDbl == vDbl;
             } catch (Exception e) {
@@ -45,8 +47,8 @@ public class FilterProcessor implements Processor {
         }),
         GREATER_THAN((c, v) -> {
             try {
-                double cDbl = Double.parseDouble(c);
-                double vDbl = Double.parseDouble(v);
+                double cDbl = parseDouble(c);
+                double vDbl = parseDouble(v);
 
                 return cDbl > vDbl;
             } catch (Exception e) {
@@ -55,8 +57,8 @@ public class FilterProcessor implements Processor {
         }),
         GREATER_THAN_OR_EQUAL((c, v) -> {
             try {
-                double cDbl = Double.parseDouble(c);
-                double vDbl = Double.parseDouble(v);
+                double cDbl = parseDouble(c);
+                double vDbl = parseDouble(v);
 
                 return cDbl >= vDbl;
             } catch (Exception e) {
@@ -65,8 +67,8 @@ public class FilterProcessor implements Processor {
         }),
         LESS_THAN((c, v) -> {
             try {
-                double cDbl = Double.parseDouble(c);
-                double vDbl = Double.parseDouble(v);
+                double cDbl = parseDouble(c);
+                double vDbl = parseDouble(v);
 
                 return cDbl < vDbl;
             } catch (Exception e) {
@@ -75,8 +77,8 @@ public class FilterProcessor implements Processor {
         }),
         LESS_THAN_OR_EQUAL((c, v) -> {
             try {
-                double cDbl = Double.parseDouble(c);
-                double vDbl = Double.parseDouble(v);
+                double cDbl = parseDouble(c);
+                double vDbl = parseDouble(v);
 
                 return cDbl <= vDbl;
             } catch (Exception e) {

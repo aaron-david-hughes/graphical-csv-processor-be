@@ -2,7 +2,7 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processin
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV;
-import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MathProcessor;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.StatisticalMathProcessor;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RowMathProcessingNodeTest {
+public class RowStatisticalMathProcessingNodeTest {
 
     @Mock
     List<CSV> csvData;
@@ -31,7 +31,7 @@ public class RowMathProcessingNodeTest {
     @Mock
     CSV input;
 
-    RowMathProcessingNode node = new RowMathProcessingNode(
+    RowStatisticalMathProcessingNode node = new RowStatisticalMathProcessingNode(
             "testId",
             "processing",
             "row_math",
@@ -40,7 +40,7 @@ public class RowMathProcessingNodeTest {
                     "col2"
             },
             "testCol",
-            MathProcessor.StatisticalType.COUNT
+            StatisticalMathProcessor.StatisticalType.COUNT
     );
 
     @Test
@@ -81,13 +81,13 @@ public class RowMathProcessingNodeTest {
     public void shouldThrowIllegalArgumentExceptionIfNoColumnsSpecified() throws IOException {
         when(csvData.size()).thenReturn(1);
 
-        RowMathProcessingNode illegalNode = new RowMathProcessingNode(
+        RowStatisticalMathProcessingNode illegalNode = new RowStatisticalMathProcessingNode(
                 "testId",
                 "processing",
                 "row_math",
                 new String[] {},
                 "testCol",
-                MathProcessor.StatisticalType.COUNT
+                StatisticalMathProcessor.StatisticalType.COUNT
         );
 
         try {
@@ -104,7 +104,7 @@ public class RowMathProcessingNodeTest {
         when(csvData.get(0)).thenReturn(input);
 
         try (
-                MockedStatic<MathProcessor> mathProcessorMockedStatic = Mockito.mockStatic(MathProcessor.class);
+                MockedStatic<StatisticalMathProcessor> mathProcessorMockedStatic = Mockito.mockStatic(StatisticalMathProcessor.class);
                 MockedStatic<ColumnNameService> columnNameServiceMockedStatic = Mockito.mockStatic(ColumnNameService.class)
         ) {
             columnNameServiceMockedStatic
@@ -120,7 +120,7 @@ public class RowMathProcessingNodeTest {
                     .thenReturn("testCol");
 
             mathProcessorMockedStatic
-                    .when(() -> MathProcessor.row(eq(input), eq(MathProcessor.StatisticalType.COUNT), eq("testCol"), any()))
+                    .when(() -> StatisticalMathProcessor.row(eq(input), eq(StatisticalMathProcessor.StatisticalType.COUNT), eq("testCol"), any()))
                     .thenReturn(csv);
 
             CSV result = node.process(csvData);

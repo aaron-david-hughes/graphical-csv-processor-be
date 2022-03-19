@@ -24,4 +24,10 @@ public class ProcessingUtils {
         String s = input.toString();
         return s.substring(1, s.length() - 1).replace("null", "").replaceAll(",\\s", ",");
     }
+
+    public static double parseDouble(String s) {
+        if (s == null || s.length() <= 0) return 0.0;
+
+        return Double.parseDouble(s);
+    }
 }

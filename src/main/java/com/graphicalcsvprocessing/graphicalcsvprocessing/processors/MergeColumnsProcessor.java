@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
 
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
+import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.*;
 
 public class MergeColumnsProcessor implements Processor {
 
@@ -56,7 +55,6 @@ public class MergeColumnsProcessor implements Processor {
         return v == null || v.isEmpty() || v.isBlank();
     }
 
-    @SuppressWarnings("unused")
     public enum MergeType {
         STRING_EQUALITY((v1, v2) -> {
             if (nullBlankOrEmpty(v1) || nullBlankOrEmpty(v2)) {
@@ -70,8 +68,8 @@ public class MergeColumnsProcessor implements Processor {
                 return true;
             }
 
-            double v1Dbl = Double.parseDouble(v1);
-            double v2Dbl = Double.parseDouble(v2);
+            double v1Dbl = parseDouble(v1);
+            double v2Dbl = parseDouble(v2);
 
             return v1Dbl == v2Dbl;
         });

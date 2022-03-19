@@ -271,16 +271,31 @@ public class NodeDeserializerTest {
     }
 
     @Test
-    public void deserializesRowMathNode() throws JsonProcessingException {
+    public void deserializesRowStatMathNode() throws JsonProcessingException {
         Map<String, String> m = new HashMap<>();
         m.put("columns", "col1,col2,col3");
         m.put("newName", "col4");
         m.put("mathOperation", "min");
 
-        Node n = objectMapper.readValue(generateJson("row_math", m), Node.class);
+        Node n = objectMapper.readValue(generateJson("row_stat_math", m), Node.class);
 
         assertNotNull(n);
-        assertEquals(RowMathProcessingNode.class, n.getClass());
+        assertEquals(RowStatisticalMathProcessingNode.class, n.getClass());
+    }
+
+    @Test
+    public void deserializesRowBasicMathNode() throws JsonProcessingException {
+        Map<String, String> m = new HashMap<>();
+        m.put("column1", "col1");
+        m.put("value", "col2");
+        m.put("newName", "col3");
+        m.put("mathOperation", "add");
+        m.put("literal", "true");
+
+        Node n = objectMapper.readValue(generateJson("row_basic_math", m), Node.class);
+
+        assertNotNull(n);
+        assertEquals(RowBasicMathProcessingNode.class, n.getClass());
     }
 
     @Test

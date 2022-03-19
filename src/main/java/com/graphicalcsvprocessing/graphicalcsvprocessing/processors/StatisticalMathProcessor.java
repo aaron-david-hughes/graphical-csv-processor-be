@@ -8,14 +8,12 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
-import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
+import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.*;
 
-public class MathProcessor implements Processor {
+public class StatisticalMathProcessor implements Processor {
 
-    private MathProcessor() {}
+    private StatisticalMathProcessor() {}
 
-    //consider empty/string values being used...
     public static CSV row(CSV input, StatisticalType mathOp, String newColName, String... columns) throws IOException {
         List<Integer> columnIndexes = Arrays.stream(columns).map(input.getHeaderMap()::get).collect(Collectors.toList());
 
@@ -30,7 +28,7 @@ public class MathProcessor implements Processor {
             List<String> values = new ArrayList<>(csvRecord.toList());
 
             DoubleSummaryStatistics stats = columnIndexes.stream()
-                    .mapToDouble(columnIdx -> Double.parseDouble(values.get(columnIdx)))
+                    .mapToDouble(columnIdx -> parseDouble(values.get(columnIdx)))
                     .summaryStatistics();
 
             double rowResult = mathOp.statisticalOperation.apply(stats);
@@ -47,7 +45,7 @@ public class MathProcessor implements Processor {
         int columnIdx = input.getHeaderMap().get(column);
 
         DoubleSummaryStatistics stats = input.getRecords().stream()
-                .mapToDouble(csvRecord -> Double.parseDouble(csvRecord.toList().get(columnIdx)))
+                .mapToDouble(csvRecord -> parseDouble(csvRecord.toList().get(columnIdx)))
                 .summaryStatistics();
 
         double result = mathOp.statisticalOperation.apply(stats);

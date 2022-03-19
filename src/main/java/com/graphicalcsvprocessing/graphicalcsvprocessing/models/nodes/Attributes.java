@@ -16,6 +16,7 @@ public class Attributes {
     public static final String JOIN_TYPE = "joinType";
     public static final String KEY_HEADER = "keyHeader";
     public static final String LIMIT = "limit";
+    public static final String LITERAL = "literal";
     public static final String MATH_OPERATION = "mathOperation";
     public static final String MERGE_COL_NAME = "mergeColName";
     public static final String MERGE_TYPE = "mergeType";
