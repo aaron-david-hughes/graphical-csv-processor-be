@@ -232,7 +232,7 @@ Node Types
 
 **Exceptions if:**
 
-*   Any column in list cannot be [identified](#user-content-identifying-columns)
+*   Specified column cannot be [identified](#user-content-identifying-columns)
 *   Condition requires double and cannot be parsed to double
 
 ### _Join Node_
@@ -379,7 +379,7 @@ Node Types
 
 **Exceptions if:**
 
-*   Any column1 or, if literal is true, value cannot be [identified](#user-content-identifying-columns)
+*   Any column1 or, if literal is false, value cannot be [identified](#user-content-identifying-columns)
 *   New name header is not [valid](#user-content-valid-columns-names)
 *   Any non-empty cell in the columns specified cannot be parsed to double
 
