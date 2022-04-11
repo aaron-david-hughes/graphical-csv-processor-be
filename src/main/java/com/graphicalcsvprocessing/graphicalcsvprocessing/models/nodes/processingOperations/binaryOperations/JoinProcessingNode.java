@@ -27,32 +27,9 @@ public class JoinProcessingNode extends BinaryOperationNode {
     public CSV process(List<CSV> csvData) throws IOException {
         super.process(csvData);
 
-        return JoinProcessor.join(this, orderData(csvData));
-    }
+        CorrespondingCSV left = ColumnNameService.deduceColumnName(leftCol, csvData);
+        CorrespondingCSV right = ColumnNameService.deduceColumnName(rightCol, csvData);
 
-    protected CSV[] orderData(List<CSV> csvData) {
-        List<CSV> csvList = new ArrayList<>();
-
-        CorrespondingCSV csv = ColumnNameService.deduceColumnName(leftCol, csvData);
-        csvList.add(csv.getCsv());
-        this.leftCol = csv.getColumnName();
-
-        csv = ColumnNameService.deduceColumnName(rightCol, csvData);
-        csvList.add(csv.getCsv());
-        this.rightCol = csv.getColumnName();
-
-        return csvList.toArray(new CSV[0]);
-    }
-
-    public String getLeftCol() {
-        return leftCol;
-    }
-
-    public String getRightCol() {
-        return rightCol;
-    }
-
-    public JoinType getJoinType() {
-        return joinType;
+        return JoinProcessor.join(left, right, joinType);
     }
 }

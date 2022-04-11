@@ -1,128 +1,146 @@
 package com.graphicalcsvprocessing.graphicalcsvprocessing.processors;
 
-import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.processingOperations.binaryOperations.JoinProcessingNode;
+import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.UnaryOperator;
+import java.util.function.BinaryOperator;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
 
-/**
- * join logic:
- *      left join (default):
- *          will go through each record in left entered data, including a record for each time the relevant
- *          right column matches - or simply itself with null on right columns if no matches found
- *
- *      right join:
- *          will go through each record in right entered data, including a record for each time the relevant
- *          left column matches - or simply itself with null on left columns if no matches found
- *
- *      inner join:
- *          will go through each record in left entered data, including a record for each time the relevant
- *          right column matches - omitting the record if no matches found
- *
- *      outer join:
- *          will go through each record in left entered data, including a record for each time the relevant
- *          right column matches - but include both data sets records which do not have a match additionally
- */
 public class JoinProcessor implements Processor {
-
-    public static CSV join(JoinProcessingNode node, CSV[] inputs) throws IOException {
-        CSV left = inputs[0];
-        CSV right = inputs[1];
-
-        switch (node.getJoinType()) {
-            case RIGHT:
-                return rightJoin(left, right, node.getLeftCol(), node.getRightCol());
-            case INNER:
-                return innerJoin(left, right, node.getLeftCol(), node.getRightCol());
-            case OUTER:
-                return outerJoin(left, right, node.getLeftCol(), node.getRightCol());
-            case LEFT:
-            default:
-                return leftJoin(left, right, node.getLeftCol(), node.getRightCol());
-        }
-    }
-
-    public static CSV leftJoin(CSV left, CSV right, String onLeft, String onRight) throws IOException {
-        return join(JoinType.LEFT, left, right, onLeft, onRight);
-    }
-
-    public static CSV rightJoin(CSV left, CSV right, String onLeft, String onRight) throws IOException {
-        return join(JoinType.RIGHT, right, left, onRight, onLeft);
-    }
-
-    public static CSV innerJoin(CSV left, CSV right, String onLeft, String onRight) throws IOException {
-        return join(JoinType.INNER, left, right, onLeft, onRight);
-    }
-
-    public static CSV outerJoin(CSV left, CSV right, String onLeft, String onRight) throws IOException {
-        return join(JoinType.OUTER, left, right, onLeft, onRight);
-    }
-
     /**
-     * Method is O(MN) where M and N are the lengths of the two record sets
+     * go through and Cartesian product set of a specific value in specified column with matching values in the other set
+     * If all match each other then still o(mn) but potential to be much better - linear if unique across both sets
      *
-     * Will have to consider what happens when column names clash in csv records...
-     *      - on join both of them
-     *      - on join is neither of them
-     *      - on join is one but not the other
-     *
-     * This has been accepted by adding Filename prefixes to column names
-     * SQL return data in the same way on a simple join
-     * If desire is to filter or rename columns etc, those are additional functions...
+     * essentially this implementation does the minimum number of comparisons required
      */
-    private static CSV join(JoinType joinType, CSV superior, CSV inferior, String onSuperior, String onInferior) throws IOException {
-        StringBuilder result = new StringBuilder(listToString(superior.getHeaders()) + "," + listToString(inferior.getHeaders()) + "\n");
+    public static CSV join(CorrespondingCSV left, CorrespondingCSV right, JoinType orderedJoinType) throws IOException {
+        CorrespondingCSV superiorCorrespondingCSV = orderedJoinType.getSuperiorCSV.apply(left, right);
+        CorrespondingCSV inferiorCorrespondingCSV = orderedJoinType.getInferiorCSV.apply(left, right);
 
-        boolean includeNonMatchStrategy = joinType.includeNonMatches.apply(true);
-        Set<CSVRecord> inferiorMatches = new HashSet<>();
+        CSV superior = superiorCorrespondingCSV.getCsv();
+        String superiorColumn = superiorCorrespondingCSV.getColumnName();
 
-        for (CSVRecord superiorRow : superior.getRecords()) {
-            List<String> matches = new ArrayList<>();
+        CSV inferior = inferiorCorrespondingCSV.getCsv();
+        String inferiorColumn = inferiorCorrespondingCSV.getColumnName();
 
-            for (CSVRecord inferiorRow : inferior.getRecords()) {
-                if (superiorRow.get(onSuperior).equals(inferiorRow.get(onInferior))) {
-                    matches.add(listToString(superiorRow.toList()) + "," + listToString(inferiorRow.toList()) + "\n");
-                    inferiorMatches.add(inferiorRow);
+        int superiorIdx = superior.getHeaderMap().get(superiorColumn);
+        int inferiorIdx = inferior.getHeaderMap().get(inferiorColumn);
+
+        List<String> superiorHeaders = superior.getHeaders();
+        List<String> inferiorHeaders = inferior.getHeaders();
+
+        List<CSVRecord> superiorRecords = superior.getRecords();
+        List<CSVRecord> inferiorRecords = inferior.getRecords();
+
+        StringBuilder sb = new StringBuilder(listToString(superiorHeaders) + "," + listToString(inferiorHeaders) + "\n");
+
+        Map<String, List<Integer>> superiorValueRanges = getValueRanges(superior, superiorIdx);
+        Map<String, List<Integer>> inferiorValueRanges = getValueRanges(inferior, inferiorIdx);
+
+        for (Map.Entry<String, List<Integer>> entry : superiorValueRanges.entrySet()) {
+            for (int i : entry.getValue()) {
+                if (!inferiorValueRanges.containsKey(entry.getKey())) {
+                    if (orderedJoinType.includeSuperiorNonMatch) {
+                        sb.append(listToString(superiorRecords.get(i).toList()))
+                                .append(",".repeat(inferiorHeaders.size()))
+                                .append("\n");
+                    }
+
+                    continue;
+                }
+
+                for (int j : inferiorValueRanges.get(entry.getKey())) {
+                    sb.append(listToString(superiorRecords.get(i).toList()))
+                            .append(",")
+                            .append(listToString(inferiorRecords.get(j).toList()))
+                            .append("\n");
                 }
             }
 
-            if (matches.isEmpty() && includeNonMatchStrategy) {
-                matches.add(listToString(superiorRow.toList()) + ",".repeat(inferior.getHeaders().size()) + "\n");
-            }
-
-            matches.forEach(result::append);
+            inferiorValueRanges.remove(entry.getKey());
         }
 
-        if (joinType == JoinType.OUTER) {
-            List<CSVRecord> missingRecords = inferior.getRecords();
-            missingRecords.removeAll(inferiorMatches);
+        if (orderedJoinType.includeInferiorNonMatch) {
+            sb.append(inferiorNonMatches(superiorHeaders, inferiorRecords, inferiorValueRanges));
+        }
 
-            for (CSVRecord row : missingRecords) {
-                result.append(",".repeat(superior.getHeaders().size()))
-                        .append(listToString(row.toList()))
+        return createCSV(sb);
+    }
+
+    private static Map<String, List<Integer>> getValueRanges(CSV csv, int columnIdx) {
+        Map<String, List<Integer>> valuesRanges = new LinkedHashMap<>();
+        List<CSVRecord> records = csv.getRecords();
+
+        for (int i = 0; i < records.size(); i++) {
+            String value = records.get(i).get(columnIdx);
+
+            if (valuesRanges.containsKey(value)) valuesRanges.get(value).add(i);
+            else valuesRanges.put(value, Collections.singletonList(i));
+        }
+
+        return valuesRanges;
+    }
+
+    private static StringBuilder inferiorNonMatches(List<String> superiorHeaders, List<CSVRecord> inferiorRecords, Map<String, List<Integer>> inferiorValueRanges) {
+        StringBuilder inferiorRecordSb = new StringBuilder();
+        for (Map.Entry<String, List<Integer>> entry : inferiorValueRanges.entrySet()) {
+            for (int i : entry.getValue()) {
+                inferiorRecordSb.append(",".repeat(superiorHeaders.size()))
+                        .append(listToString(inferiorRecords.get(i).toList()))
                         .append("\n");
             }
         }
 
-        return createCSV(result);
+        return inferiorRecordSb;
     }
 
     public enum JoinType {
-        LEFT(isSuperior -> isSuperior),
-        RIGHT(isSuperior -> isSuperior),
-        INNER(isSuperior -> false),
-        OUTER(isSuperior -> true);
+        LEFT(
+                (left, right) -> left,
+                (left, right) -> right,
+                true,
+                false
+        ),
+        RIGHT(
+                (left, right) -> right,
+                (left, right) -> left,
+                true,
+                false
+        ),
+        INNER(
+                (left, right) -> left,
+                (left, right) -> right,
+                false,
+                false
+        ),
+        OUTER(
+                (left, right) -> left,
+                (left, right) -> right,
+                true,
+                true
+        );
 
-        JoinType(UnaryOperator<Boolean> includeNonMatches) {
-            this.includeNonMatches = includeNonMatches;
+        JoinType(
+                BinaryOperator<CorrespondingCSV> getSuperiorCSV,
+                BinaryOperator<CorrespondingCSV> getInferiorCSV,
+                boolean includeSuperiorNonMatch,
+                boolean includeInferiorNonMatch
+        ) {
+            this.getSuperiorCSV = getSuperiorCSV;
+            this.getInferiorCSV = getInferiorCSV;
+            this.includeSuperiorNonMatch = includeSuperiorNonMatch;
+            this.includeInferiorNonMatch = includeInferiorNonMatch;
         }
 
-        private final UnaryOperator<Boolean> includeNonMatches;
+        BinaryOperator<CorrespondingCSV> getSuperiorCSV;
+        BinaryOperator<CorrespondingCSV> getInferiorCSV;
+
+        boolean includeSuperiorNonMatch;
+        boolean includeInferiorNonMatch;
     }
 }

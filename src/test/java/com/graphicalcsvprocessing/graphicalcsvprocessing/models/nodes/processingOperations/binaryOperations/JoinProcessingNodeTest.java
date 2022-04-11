@@ -83,16 +83,19 @@ public class JoinProcessingNodeTest {
             MockedStatic<JoinProcessor> joinProcessorMockedStatic = Mockito.mockStatic(JoinProcessor.class);
             MockedStatic<ColumnNameService> columnNameServiceMockedStatic = Mockito.mockStatic(ColumnNameService.class)
         ) {
+            CorrespondingCSV leftCorrespondingCSV = new CorrespondingCSV("", left);
+            CorrespondingCSV rightCorrespondingCSV = new CorrespondingCSV("", right);
+
             columnNameServiceMockedStatic
                     .when(() -> ColumnNameService.deduceColumnName("testLeft", csvData))
-                    .thenReturn(new CorrespondingCSV("", left));
+                    .thenReturn(leftCorrespondingCSV);
 
             columnNameServiceMockedStatic
                     .when(() -> ColumnNameService.deduceColumnName("testRight", csvData))
-                    .thenReturn(new CorrespondingCSV("", right));
+                    .thenReturn(rightCorrespondingCSV);
 
             joinProcessorMockedStatic
-                    .when(() -> JoinProcessor.join(j, new CSV[] {left, right}))
+                    .when(() -> JoinProcessor.join(leftCorrespondingCSV, rightCorrespondingCSV, j.joinType))
                     .thenReturn(csv);
 
             CSV result = j.process(csvData);
@@ -101,21 +104,6 @@ public class JoinProcessingNodeTest {
         } catch (IOException e) {
             fail("No exception expected");
         }
-    }
-
-    @Test
-    public void testGetLeftCol() {
-        assertEquals("testLeft", j.getLeftCol());
-    }
-
-    @Test
-    public void testGetRightCol() {
-        assertEquals("testRight", j.getRightCol());
-    }
-
-    @Test
-    public void testGetJoinType() {
-        assertEquals(JoinProcessor.JoinType.LEFT, j.getJoinType());
     }
 
     @Test

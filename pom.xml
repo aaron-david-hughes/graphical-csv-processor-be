@@ -39,20 +39,17 @@
             <optional>true</optional>
         </dependency>
 
-        <!--JUnit Jupiter Engine to depend on the JUnit5 engine and JUnit 5 API -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.7.2</version>
             <scope>test</scope>
         </dependency>
-        <!--JUnit Jupiter Engine to depend on the JUnit4 engine and JUnit 4 API  -->
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
             <version>5.7.2</version>
         </dependency>
-        <!-- Optional : override the JUnit 4 API version provided by junit-vintage-engine -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -72,12 +69,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- simply will use this dependency to compare results -->
-        <dependency>
-            <groupId>sh.joinery</groupId>
-            <artifactId>joinery-dataframe</artifactId>
-            <version>1.10</version>
-        </dependency>
         <!-- apache commons content for reading csv content -->
         <dependency>
             <groupId>org.apache.commons</groupId>
