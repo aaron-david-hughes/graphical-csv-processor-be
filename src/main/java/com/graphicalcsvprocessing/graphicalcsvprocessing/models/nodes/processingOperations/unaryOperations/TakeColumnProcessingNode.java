@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * model to represent the specification of columns of which to select
+ */
 public class TakeColumnProcessingNode extends UnaryOperationNode {
     protected String[] columns;
 

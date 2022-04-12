@@ -8,6 +8,9 @@ import java.util.List;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService.validateAlias;
 
+/**
+ * model to represent the alias operation
+ */
 public class AliasProcessingNode extends UnaryOperationNode {
 
     protected String alias;

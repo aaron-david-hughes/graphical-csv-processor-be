@@ -13,6 +13,11 @@ import java.util.Map;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
 
+/**
+ * Multi-readable CSV model, holding headers and lists or records, along with hashable column indexing
+ *
+ * this was necessary as the apache util used to read CSV is a single-readable
+ */
 public class CSV {
 
     private final List<String> headers;

@@ -8,6 +8,9 @@ import java.util.*;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.*;
 
+/**
+ * processor for handling application and removal of aliases in linear time
+ */
 public class AliasProcessor {
 
     private AliasProcessor() {}

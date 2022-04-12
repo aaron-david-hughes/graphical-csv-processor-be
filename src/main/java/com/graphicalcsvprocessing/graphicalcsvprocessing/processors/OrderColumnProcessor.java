@@ -10,6 +10,9 @@ import java.util.function.BiFunction;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.parseDouble;
 
+/**
+ * processor to order a column in a numeric or alphabetical order either ascending or descending in O(nlogn)
+ */
 public class OrderColumnProcessor implements Processor {
 
     private OrderColumnProcessor() {}

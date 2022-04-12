@@ -6,6 +6,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * implementation of handling rules for naming columns and aliases, as laid out in README.md
+ */
 public class ColumnNameService {
     private ColumnNameService() {}
 
@@ -34,6 +37,9 @@ public class ColumnNameService {
         );
     }
 
+    /**
+     * returns the CSV which the passed column name relates to, throwing exceptions if not in any, or ambiguous to which is referred
+     */
     public static CorrespondingCSV deduceColumnName(String columnName, List<CSV> csvData) {
         if (columnName.contains(".")) {
             List<CSV> csvMatches = new ArrayList<>();

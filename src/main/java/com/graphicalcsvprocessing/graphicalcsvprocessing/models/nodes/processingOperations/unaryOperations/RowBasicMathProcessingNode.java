@@ -10,6 +10,9 @@ import java.util.List;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.BasicMathProcessor.MathOperation;
 
+/**
+ * model to represent basic math functions of add, subtract, modulo, multiply and divide
+ */
 public class RowBasicMathProcessingNode extends UnaryOperationNode {
 
     protected String column1;

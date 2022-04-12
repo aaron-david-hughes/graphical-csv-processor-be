@@ -8,6 +8,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameServ
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * model to represent concatenation of columns operation
+ */
 public class ConcatColumnsProcessingNode extends UnaryOperationNode {
 
     protected String column1;

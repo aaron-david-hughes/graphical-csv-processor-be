@@ -11,6 +11,9 @@ import java.util.stream.IntStream;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
 
+/**
+ * processor to make the data set unique across the column specified unless a merge which occurs results in a data clash
+ */
 public class UniqueColumnProcessor implements Processor {
 
     private UniqueColumnProcessor() {}

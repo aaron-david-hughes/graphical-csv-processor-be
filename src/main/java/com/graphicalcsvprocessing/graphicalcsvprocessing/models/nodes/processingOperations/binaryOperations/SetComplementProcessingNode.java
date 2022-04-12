@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * model to represent a set compliment operation
+ */
 public class SetComplementProcessingNode extends BinaryOperationNode {
 
     protected String keyHeader;

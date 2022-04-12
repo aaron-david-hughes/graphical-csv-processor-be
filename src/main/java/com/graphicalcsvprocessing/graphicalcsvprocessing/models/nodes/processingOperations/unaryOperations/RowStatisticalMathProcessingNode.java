@@ -9,6 +9,9 @@ import java.util.List;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.StatisticalMathProcessor.StatisticalType;
 
+/**
+ * model to represent math operations of average, count, min, max, sum
+ */
 public class RowStatisticalMathProcessingNode extends UnaryOperationNode {
 
     protected String[] columns;

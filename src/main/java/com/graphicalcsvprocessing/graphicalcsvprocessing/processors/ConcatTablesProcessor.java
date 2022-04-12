@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
 
+/**
+ * processor to concatenate two input files together in O(mn) where
+ * n is the number of records in the the second input and m is the number of columns in the second input
+ */
 public class ConcatTablesProcessor implements Processor {
 
     private ConcatTablesProcessor() {}
 
-    /**
-     * complexity is looking to be O(input2.size() * input2.headers.size())
-     */
     public static CSV concat(CSV input1, CSV input2) throws IOException {
-        //get a group of headers such that all unique
         Map<String, Integer> headers = new LinkedHashMap<>();
 
         List<String> headers1 = input1.getHeaders();

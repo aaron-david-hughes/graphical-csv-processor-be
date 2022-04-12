@@ -8,6 +8,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameServ
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * model to represent renaming of a column operation
+ */
 public class RenameColumnProcessingNode extends UnaryOperationNode {
 
     protected String column;

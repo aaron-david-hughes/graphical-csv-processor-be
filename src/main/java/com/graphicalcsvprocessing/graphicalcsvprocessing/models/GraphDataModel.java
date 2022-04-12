@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Model which enables the representation of graphs
+ */
 @JsonDeserialize(using = GraphDataModelDeserializer.class)
 public class GraphDataModel {
     private final Node[] nodes;

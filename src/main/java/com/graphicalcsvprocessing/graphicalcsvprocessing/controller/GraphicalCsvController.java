@@ -22,6 +22,13 @@ public class GraphicalCsvController {
     @Autowired
     CsvProcessorService csvProcessorService;
 
+    /**
+     * maps POST /process to this handler
+     *
+     * deserializes graph and controls file delivery so that by the time handler runs all request aspects are validated
+     *
+     * returns a ZIP of files to be returned after process
+     */
     @PostMapping("/process")
     public void postProcess(
             HttpServletResponse response,

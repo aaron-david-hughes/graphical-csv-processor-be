@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * model to represent drop columns operation
+ */
 public class DropColumnProcessingNode extends UnaryOperationNode {
     protected String[] columns;
 

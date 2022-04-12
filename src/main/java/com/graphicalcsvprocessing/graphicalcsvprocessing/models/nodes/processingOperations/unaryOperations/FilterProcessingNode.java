@@ -10,6 +10,9 @@ import java.util.List;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.FilterProcessor.FilterType;
 
+/**
+ * model to represent the filter operation
+ */
 public class FilterProcessingNode extends UnaryOperationNode {
     protected String column;
     protected String condition;

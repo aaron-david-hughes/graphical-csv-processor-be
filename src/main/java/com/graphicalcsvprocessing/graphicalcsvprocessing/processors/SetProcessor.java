@@ -3,10 +3,14 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.processors;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CSV;
 import org.apache.commons.csv.CSVRecord;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * processor to enable set compliment of a pair of input files in linear time
+ */
 public class SetProcessor implements Processor {
 
     private SetProcessor() {}
@@ -26,7 +30,7 @@ public class SetProcessor implements Processor {
 
         Set<String> presentInSubset = subsetRecords.stream()
                 .map(csvRecord -> csvRecord.get(subsetHeaderIdx))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(HashSet::new));
 
         List<CSVRecord> complementRecords = records.stream()
                 .filter(csvRecord -> !presentInSubset.contains(csvRecord.get(setHeaderIdx)))

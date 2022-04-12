@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * model to represent a logistical OR operation
+ */
 public class OrProcessingNode extends BinaryOperationNode {
 
     protected String column;

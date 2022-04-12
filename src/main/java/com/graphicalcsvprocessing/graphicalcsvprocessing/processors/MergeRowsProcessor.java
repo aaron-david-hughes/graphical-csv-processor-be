@@ -14,6 +14,9 @@ import java.util.stream.IntStream;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
 
+/**
+ * processor to merge rows of a specific value together provided no data clashes occur in linear time
+ */
 public class MergeRowsProcessor implements Processor {
 
     private MergeRowsProcessor() {}

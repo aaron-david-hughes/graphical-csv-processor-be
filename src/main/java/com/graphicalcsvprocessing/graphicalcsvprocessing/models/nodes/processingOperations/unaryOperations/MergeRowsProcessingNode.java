@@ -8,6 +8,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameServ
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * model to represent merge rows operation
+ */
 public class MergeRowsProcessingNode extends UnaryOperationNode {
 
     protected String column;

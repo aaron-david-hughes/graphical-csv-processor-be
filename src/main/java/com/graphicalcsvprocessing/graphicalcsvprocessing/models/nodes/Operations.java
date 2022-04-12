@@ -1,5 +1,9 @@
 package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes;
 
+/**
+ * corresponding name of operation in serialized graph sent to API
+ * used for node deserialization
+ */
 public class Operations {
     public static final String ALIAS = "alias";
     public static final String COLUMN_MATH = "column_math";

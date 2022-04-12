@@ -8,6 +8,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.edges.Edge;
 
 import java.io.IOException;
 
+/**
+ * enables the deserialization of the Edge class
+ */
 public class EdgeDeserializer extends StdDeserializer<Edge> {
 
     @SuppressWarnings("unused")

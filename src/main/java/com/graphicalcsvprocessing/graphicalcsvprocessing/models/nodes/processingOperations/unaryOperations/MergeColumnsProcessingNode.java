@@ -10,6 +10,9 @@ import java.util.List;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MergeColumnsProcessor.MergeType;
 
+/**
+ * model to represent merge columns operation
+ */
 public class MergeColumnsProcessingNode extends UnaryOperationNode {
 
     protected String column1;

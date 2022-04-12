@@ -9,6 +9,9 @@ import java.util.List;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
 
+/**
+ * processor to execute concatenation of two columns in linear time
+ */
 public class ConcatColumnsProcessor implements Processor {
 
     private ConcatColumnsProcessor() {}

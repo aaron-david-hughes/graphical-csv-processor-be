@@ -3,6 +3,9 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.models.edges;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.deserializers.EdgeDeserializer;
 
+/**
+ * model to represent directional edges
+ */
 @JsonDeserialize(using = EdgeDeserializer.class)
 public class Edge {
     private final String from;

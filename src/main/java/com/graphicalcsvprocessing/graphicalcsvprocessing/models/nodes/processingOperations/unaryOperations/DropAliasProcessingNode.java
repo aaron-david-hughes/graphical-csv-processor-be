@@ -6,6 +6,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.AliasProcess
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * model to represent drop alias operation
+ */
 public class DropAliasProcessingNode extends UnaryOperationNode {
 
     public DropAliasProcessingNode(String id, String group, String operation) {

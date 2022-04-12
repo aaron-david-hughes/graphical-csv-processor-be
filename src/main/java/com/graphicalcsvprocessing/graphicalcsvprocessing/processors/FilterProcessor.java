@@ -10,6 +10,9 @@ import java.util.function.BiPredicate;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.parseDouble;
 
+/**
+ * processor to filter on a variety of conditions in linear time
+ */
 public class FilterProcessor implements Processor {
 
     private FilterProcessor() {}
@@ -22,8 +25,11 @@ public class FilterProcessor implements Processor {
 
         int colIdx = operand.getHeaderMap().get(column);
 
+        FilterType filterType = node.getFilterType();
+        String condition = node.getCondition();
+
         for (CSVRecord csvRecord : operand.getRecords()) {
-            if (node.getFilterType().predicate.test(csvRecord.get(colIdx), node.getCondition())) {
+            if (filterType.predicate.test(csvRecord.get(colIdx), condition)) {
                 matches.add(csvRecord);
             } else {
                 notMatches.add(csvRecord);

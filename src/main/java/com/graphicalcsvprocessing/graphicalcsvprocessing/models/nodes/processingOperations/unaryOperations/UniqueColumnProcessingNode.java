@@ -8,6 +8,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameServ
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * model to represent unique column operation
+ */
 public class UniqueColumnProcessingNode extends UnaryOperationNode {
 
     protected String column;

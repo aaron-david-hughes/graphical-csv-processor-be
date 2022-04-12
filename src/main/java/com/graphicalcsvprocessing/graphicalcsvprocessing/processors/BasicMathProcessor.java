@@ -10,6 +10,9 @@ import java.util.function.BiFunction;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.*;
 
+/**
+ * processor to execute basic math operations of add, subtract, modulo, division and multiplication in linear time
+ */
 public class BasicMathProcessor implements Processor {
 
     public static CSV process(CSV input, MathOperation mathOp, String col1, String col2, String newColName) throws IOException {

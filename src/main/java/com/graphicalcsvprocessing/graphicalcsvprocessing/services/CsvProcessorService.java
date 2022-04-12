@@ -14,6 +14,9 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * service which handles the processing of the graph, validating input files with graph beforehand
+ */
 @Service
 public class CsvProcessorService {
 

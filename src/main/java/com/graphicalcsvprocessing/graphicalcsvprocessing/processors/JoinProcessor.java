@@ -11,13 +11,14 @@ import java.util.function.BinaryOperator;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
 
+/**
+ * processor to join two input files on specified column equality in O(mn) time where
+ * m is the number of records in the first input and n is the number of records in the second input
+ *
+ * conscious effort to implement a hash join means the performance improves up to linear time values are unique across the column
+ */
 public class JoinProcessor implements Processor {
-    /**
-     * go through and Cartesian product set of a specific value in specified column with matching values in the other set
-     * If all match each other then still o(mn) but potential to be much better - linear if unique across both sets
-     *
-     * essentially this implementation does the minimum number of comparisons required
-     */
+
     public static CSV join(CorrespondingCSV left, CorrespondingCSV right, JoinType orderedJoinType) throws IOException {
         CorrespondingCSV superiorCorrespondingCSV = orderedJoinType.getSuperiorCSV.apply(left, right);
         CorrespondingCSV inferiorCorrespondingCSV = orderedJoinType.getInferiorCSV.apply(left, right);

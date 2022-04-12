@@ -10,6 +10,9 @@ import java.util.List;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.createCSV;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.listToString;
 
+/**
+ * processor to rename a specified column in the input in linear time
+ */
 public class RenameColumnProcessor implements Processor {
 
     private RenameColumnProcessor() {}

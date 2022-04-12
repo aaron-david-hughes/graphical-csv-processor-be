@@ -127,27 +127,6 @@ public class JoinProcessorTest {
         assertEquals(14, result.getRecords().size());
     }
 
-//    @Test
-//    public void throwsIllegalArgumentExceptionIfColumnNameIsNotFound() throws IOException {
-//        j = new JoinProcessingNode(
-//                "joinProcessingTest",
-//                "processing", "join",
-//                leftCol,
-//                rightCol,
-//                JoinType.OUTER
-//        );
-//
-//        try {
-//            JoinProcessor.join(j, reorderedData);
-//            fail("Expected an IllegalArgumentException to be thrown");
-//        } catch (IllegalArgumentException e) {
-//            assertEquals(
-//                    "Mapping for Attendant not found, expected one of [StudentNum, Score]",
-//                    e.getMessage()
-//            );
-//        }
-//    }
-
     private void checkHeaders(CSV[] orderedData, CSV result, boolean reverse) {
         int first = 0;
         int second = 1;

@@ -11,6 +11,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.Objects;
 
+/**
+ * custom argument resolver to enable complex object deserialization via the spring framework using annotations
+ */
 public class RequestParamDeserializingArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
@@ -51,6 +54,9 @@ public class RequestParamDeserializingArgumentResolver implements HandlerMethodA
         return arg;
     }
 
+    /**
+     * returns a string from request to be deserialized
+     */
     private static class RequestParamDeserializingArgumentStringResolver extends RequestParamMethodArgumentResolver {
         public RequestParamDeserializingArgumentStringResolver() {
             super(true);

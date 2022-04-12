@@ -1,5 +1,8 @@
 package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes;
 
+/**
+ * constants relating to attributes of nodes to be deserialized
+ */
 public class Attributes {
 
     public static final String ALIAS = "alias";

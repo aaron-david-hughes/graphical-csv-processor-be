@@ -2,6 +2,9 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOpera
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Node;
 
+/**
+ * base file operation node
+ */
 public abstract class FileOperationNode extends Node {
     protected String name;
 

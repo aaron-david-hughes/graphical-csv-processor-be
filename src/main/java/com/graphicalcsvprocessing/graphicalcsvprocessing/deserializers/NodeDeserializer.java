@@ -29,6 +29,9 @@ import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.Order
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.StatisticalMathProcessor.StatisticalType;
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.MergeColumnsProcessor.MergeType;
 
+/**
+ * Custom deserialization of a node to allow for creation of matching subclass node type
+ */
 public class NodeDeserializer extends StdDeserializer<Node> {
 
     private static final Map<String, Function<JsonNode, Node>> operationDeserialize = new HashMap<>();

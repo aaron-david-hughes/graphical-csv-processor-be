@@ -5,12 +5,14 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.CorrespondingCSV
 import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.JoinProcessor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.JoinProcessor.JoinType;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.services.ColumnNameService;
 
+/**
+ * model to represent a join operation
+ */
 public class JoinProcessingNode extends BinaryOperationNode {
     protected String leftCol;
     protected String rightCol;

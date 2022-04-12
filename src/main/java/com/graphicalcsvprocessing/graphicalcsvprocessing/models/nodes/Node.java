@@ -3,6 +3,9 @@ package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.graphicalcsvprocessing.graphicalcsvprocessing.deserializers.NodeDeserializer;
 
+/**
+ * base node model
+ */
 @JsonDeserialize(using = NodeDeserializer.class)
 public abstract class Node {
     protected String id;

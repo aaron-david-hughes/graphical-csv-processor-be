@@ -14,6 +14,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.io.IOException;
 
+/**
+ * Handling anticipated exceptions and providing a catch all handler
+ */
 @ControllerAdvice
 public class GraphicalCsvExceptionHandler extends ResponseEntityExceptionHandler {
 

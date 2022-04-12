@@ -10,6 +10,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Node;
 
 import java.io.IOException;
 
+/**
+ * enables the GraphDataModel class deserialization before processing request
+ */
 public class GraphDataModelDeserializer extends StdDeserializer<GraphDataModel> {
 
     @SuppressWarnings("unused")

@@ -10,6 +10,10 @@ import java.util.List;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.*;
 
+/**
+ * processor to drop or select specified columns from a supplied input file in O(mn)
+ * where m is the number of records and n is the number of columns to be removed
+ */
 public class ColumnProcessor implements Processor {
 
     private ColumnProcessor() {}

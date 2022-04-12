@@ -10,6 +10,9 @@ import java.util.List;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.processors.OrderColumnProcessor.*;
 
+/**
+ * model to represent ordering operation
+ */
 public class OrderColumnProcessingNode extends UnaryOperationNode {
 
     protected String column;

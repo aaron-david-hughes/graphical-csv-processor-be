@@ -6,6 +6,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.ConcatTables
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * model to represent a table concatenation operation
+ */
 public class ConcatTablesProcessingNode extends BinaryOperationNode {
 
     public ConcatTablesProcessingNode(String id, String group, String operation) {

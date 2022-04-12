@@ -11,6 +11,9 @@ import java.util.function.BiPredicate;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.*;
 
+/**
+ * processor to merge two columns of an input file together provided no data clashes occur in linear time
+ */
 public class MergeColumnsProcessor implements Processor {
 
     public static CSV merge(CSV input, MergeColumnsProcessingNode node) throws IOException {

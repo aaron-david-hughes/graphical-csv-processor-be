@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+/**
+ * utils enabling creation of a CSV model if a Byte Array reading is required
+ */
 public class ProcessingUtils {
     private ProcessingUtils() {}
 

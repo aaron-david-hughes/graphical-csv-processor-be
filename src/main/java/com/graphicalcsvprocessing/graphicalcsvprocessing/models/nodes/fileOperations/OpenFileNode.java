@@ -1,5 +1,8 @@
 package com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.fileOperations;
 
+/**
+ * model to represent the opening of a file into the query
+ */
 public class OpenFileNode extends FileOperationNode {
 
     public static final int NUMBER_INBOUND_EDGES = 0;

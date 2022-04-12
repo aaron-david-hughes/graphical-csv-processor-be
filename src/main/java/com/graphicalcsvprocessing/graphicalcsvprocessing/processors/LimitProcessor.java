@@ -5,6 +5,9 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.util.List;
 
+/**
+ * processor to limit the number of records in the output file in linear time
+ */
 public class LimitProcessor implements Processor {
 
     private LimitProcessor() {}

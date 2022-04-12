@@ -6,6 +6,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.models.nodes.Node;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * model enabling the identification of the of processing node operations in the query
+ */
 public abstract class ProcessingOperationNode extends Node {
     protected ProcessingOperationNode(String id, String group, String operation) {
         super(id, group, operation);

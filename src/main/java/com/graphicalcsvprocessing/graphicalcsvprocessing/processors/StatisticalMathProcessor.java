@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 
 import static com.graphicalcsvprocessing.graphicalcsvprocessing.utils.ProcessingUtils.*;
 
+/**
+ * processor to handle to statistical maths operations to be carried out on a row or column in linear time
+ */
 public class StatisticalMathProcessor implements Processor {
 
     private StatisticalMathProcessor() {}

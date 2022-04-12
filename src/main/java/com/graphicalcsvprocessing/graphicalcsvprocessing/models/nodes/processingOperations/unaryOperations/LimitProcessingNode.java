@@ -6,6 +6,9 @@ import com.graphicalcsvprocessing.graphicalcsvprocessing.processors.LimitProcess
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * model to represent limit number of records operations
+ */
 public class LimitProcessingNode extends UnaryOperationNode {
 
     protected int limit;
