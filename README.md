@@ -26,7 +26,6 @@ Integration Guide
 curl --location --request POST 'http://localhost:8080/process' \
 --form 'csvFiles=@"/redacted/Scores.csv"' \
 --form 'graph="{
-	\"defaultValues\": {},
 	\"nodes\": [
 		{
 			\"id\": \"0\",
