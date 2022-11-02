@@ -31,10 +31,12 @@ public class RowStatisticalMathProcessingNode extends UnaryOperationNode {
 
         if (columns.length == 0) throw new IllegalArgumentException("Columns list must not be empty");
 
-        for (String s : columns) {
-            ColumnNameService.deduceColumnName(s, csvData);
+        String[] deducedColumns = new String[columns.length];
+
+        for (int i = 0; i < columns.length; i++) {
+            deducedColumns[i] = ColumnNameService.deduceColumnName(columns[i], csvData).getColumnName();
         }
 
-        return StatisticalMathProcessor.row(csvData.get(0), mathOp, ColumnNameService.validateColumnName(newName), columns);
+        return StatisticalMathProcessor.row(csvData.get(0), mathOp, ColumnNameService.validateColumnName(newName), deducedColumns);
     }
 }
