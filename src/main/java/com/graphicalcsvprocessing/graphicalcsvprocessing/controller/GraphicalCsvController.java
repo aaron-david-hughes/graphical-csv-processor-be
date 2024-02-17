@@ -56,4 +56,9 @@ public class GraphicalCsvController {
         response.setHeader("Content-Disposition", "attachment;filename=results.zip");
         response.setStatus(HttpServletResponse.SC_OK);
     }
+
+    @GetMapping("/")
+    public void health(HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
 }
